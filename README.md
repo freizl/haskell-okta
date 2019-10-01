@@ -1,4 +1,4 @@
-[![Build Status](https://secure.travis-ci.org/freizl/samples-haskell-scotty.svg?branch=master)](https://travis-ci.com/freizl/samples-haskell-scotty)
+[![Build Status](https://secure.travis-ci.org/freizl/haskell-okta.svg?branch=master)](https://travis-ci.com/freizl/haskell-okta)
 
 # Sample config
 
