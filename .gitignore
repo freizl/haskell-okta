@@ -1,0 +1,17 @@
+node_modules
+dist
+npm-debug.log
+yarn-debug.log
+.DS_Store
+.samples.config.json
+
+# Haskell
+.stack-work
+*.tix
+dist-newstyle
+.ghc.environment.*
+cabal.project.local*
+
+# Emacs
+TAGS
+.projectile

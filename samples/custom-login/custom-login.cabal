@@ -1,0 +1,71 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 65b47c2eb5d56376b2a87e57b0f72e7efdd1a68e191c7c58b595cbf1d0d27023
+
+name:           custom-login
+version:        0.1.0.0
+description:    Please see the README on Github at <https://github.com/freizl/haskell-oktacustom-login>
+category:       Web
+homepage:       https://github.com/freizl/haskell-okta#readme
+bug-reports:    https://github.com/freizl/haskell-okta/issues
+author:         Haisheng Wu
+maintainer:     freizl@gmail.com
+copyright:      Haisheng Wu
+license:        Apache-2.0
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/freizl/haskell-okta
+
+executable custom-login-exe
+  main-is: Main.hs
+  other-modules:
+      App
+      Paths_custom_login
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N -O
+  build-depends:
+      base >=4.7 && <5
+    , lens
+    , okta-samples-common
+    , scotty
+    , unordered-containers
+  default-language: Haskell2010
+
+test-suite custom-login-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Specs.App
+      Specs.Config
+      Specs.Internal
+      Specs.Token
+      Paths_custom_login
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , hspec
+    , hspec-wai
+    , http-types
+    , jose
+    , lens
+    , process
+    , tasty
+    , tasty-ant-xml
+    , tasty-hspec
+    , text
+    , wai
+    , wai-extra
+  default-language: Haskell2010

@@ -1,0 +1,59 @@
+name:                okta-samples-common
+version:             0.1.0.0
+github:              "freizl/samples-common"
+license:             BSD3
+author:              "Haisheng Wu"
+maintainer:          "freizl@gmail.com"
+copyright:           "2016 Haisheng Wu"
+
+extra-source-files:
+- README.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/freizl/samples-common#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+  ghc-options:
+    - -Wall
+  dependencies:
+  - aeson
+  - jose
+  - lens
+  - unordered-containers
+  - monad-time
+  - network-uri
+  - bytestring
+  - http-conduit
+  - http-types
+  - scotty
+  - cookie
+  - binary
+  - text
+  - wai
+  - wai-extra
+  - wai-middleware-static
+  - warp
+  - time
+  - mtl
+  - lucid
+
+tests:
+  samples-common-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - okta-samples-common

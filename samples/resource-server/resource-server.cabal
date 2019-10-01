@@ -1,0 +1,45 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 6f3c32206fb09376f807986f39ac811981e48379be735b435d131fddf3868111
+
+name:           resource-server
+version:        0.1.0.0
+description:    Please see the README on Github at <https://github.com/freizl/haskell-okta/resource-server>
+category:       Web
+homepage:       https://github.com/freizl/haskell-okta#readme
+bug-reports:    https://github.com/freizl/haskell-okta/issues
+author:         Haisheng Wu
+maintainer:     freizl@gmail.com
+copyright:      Haisheng Wu
+license:        Apache-2.0
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/freizl/haskell-okta
+
+executable resource-server-exe
+  main-is: Main.hs
+  other-modules:
+      App
+      Types
+      Paths_resource_server
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N -O
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , http-types
+    , lens
+    , okta-samples-common
+    , scotty
+    , text
+    , unordered-containers
+  default-language: Haskell2010

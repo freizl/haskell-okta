@@ -1,0 +1,37 @@
+name:                resource-server
+version:             0.1.0.0
+github:              "freizl/haskell-okta"
+license:             Apache-2.0
+author:              Haisheng Wu
+maintainer:          freizl@gmail.com
+copyright:           Haisheng Wu
+category:            Web
+build-type:          Simple
+
+extra-source-files:
+- README.md
+
+
+description:         Please see the README on Github at <https://github.com/freizl/haskell-okta/resource-server>
+
+dependencies:
+- base >= 4.7 && < 5
+
+executables:
+  resource-server-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -Wall
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -O
+    dependencies:
+    - lens
+    - unordered-containers
+    - scotty
+    - aeson
+    - text
+    - http-types
+    - okta-samples-common
