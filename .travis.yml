@@ -4,8 +4,8 @@ ghc:
   - "8.6.5"
 script:
   - cabal v2-build all
-  - cabal exec buildtool -- hlint
- ## - cabal exec buildtool -- unittest
+ ## TODO - cabal exec buildtool -- hlint
+ ## TODO - cabal exec buildtool -- unittest
 install:
   - cabal v2-install 
-  ##--enable-tests
+  ## TODO --enable-tests
