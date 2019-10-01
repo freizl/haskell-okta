@@ -4,6 +4,7 @@ npm-debug.log
 yarn-debug.log
 .DS_Store
 .samples.config.json
+build2
 
 # Haskell
 .stack-work
