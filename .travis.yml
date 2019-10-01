@@ -7,4 +7,5 @@ script:
   - cabal exec buildtool -- hlint
  ## - cabal exec buildtool -- unittest
 install:
-  - cabal v2-install --enable-tests
+  - cabal v2-install 
+  ##--enable-tests
