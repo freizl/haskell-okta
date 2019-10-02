@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6ec518f12d3dead513a687002e6746ec631b4327fa692f93bddd706ba8349824
+-- hash: e66ce7ed0577126dff29ee8f7a159ba514a7b870ea66aa3da80714dbd6d8f0db
 
 name:           okta-hosted-login
 version:        0.1.0.0
@@ -31,7 +31,7 @@ library
       Main
       Paths_okta_hosted_login
   hs-source-dirs:
-      App
+      app
   ghc-options: -Wall
   build-depends:
       base >=4.7 && <5
