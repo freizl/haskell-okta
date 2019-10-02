@@ -1,11 +1,23 @@
 language: haskell
+
+notifications:
+  - slack: freizl:D42Dy68Q4Cj8Bjw5Qi9mZrQf
+
+cache:
+  - directory
+    - ~/.cabal
+    - ./dist-newstyle
+    
 cabal: "2.4"
+
 ghc:
   - "8.6.5"
+  
 script:
   - cabal v2-build all
  ## TODO - cabal exec buildtool -- hlint
  ## TODO - cabal exec buildtool -- unittest
+
 install:
   - cabal v2-install 
   ## TODO --enable-tests
