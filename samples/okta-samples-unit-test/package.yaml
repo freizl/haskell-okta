@@ -1,4 +1,4 @@
-name:                okta-samples-common
+name:                okta-samples-unit-test
 version:             0.1.0.0
 github:              "freizl/samples-common"
 license:             BSD3
@@ -21,28 +21,30 @@ description:         Please see the README on GitHub at <https://github.com/frei
 dependencies:
 - base >= 4.7 && < 5
 
-library:
-  source-dirs: src
-  ghc-options:
-    - -Wall
-  dependencies:
-  - aeson
-  - jose
-  - lens
-  - unordered-containers
-  - monad-time
-  - network-uri
-  - bytestring
-  - http-conduit
-  - http-types
-  - scotty
-  - cookie
-  - binary
-  - text
-  - wai
-  - wai-extra
-  - wai-middleware-static
-  - warp
-  - time
-  - mtl
-  - lucid
+tests:
+  okta-samples-unit-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - okta-hosted-login
+    - custom-login
+    - okta-samples-common
+    - http-types
+    - bytestring
+    - text
+    - lens
+    - jose
+    - aeson
+    - process
+    - wai-extra
+    - tasty
+    - tasty-hspec
+    - tasty-ant-xml
+    - hspec
+    - hspec-wai
+    - wai
+    - lucid

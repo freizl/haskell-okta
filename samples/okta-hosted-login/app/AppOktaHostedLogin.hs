@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module App (app) where
+module AppOktaHostedLogin (app, waiApp) where
 
 
 import           Data.Text.Lazy            (Text)
@@ -23,13 +23,14 @@ app opt = do
   cf <- readConfigFile
   case cf of
     Left l  -> print l
-    Right c -> Okta.runApp opt c $ do
-      get "/login" $ loginRedirectH c
-      get "/authorization-code/callback" $ callbackH c
-      get "/" homeH
-      get "/profile" $ profileH c
-      get "/logout" logoutH
+    Right c -> Okta.runApp c (waiApp opt c)
 
+waiApp opt c = Okta.waiApp opt $ do
+  get "/login" $ loginRedirectH c
+  get "/authorization-code/callback" $ callbackH c
+  get "/" homeH
+  get "/profile" $ profileH c
+  get "/logout" logoutH
 --------------------------------------------------
 -- * Handlers
 --------------------------------------------------

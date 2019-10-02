@@ -1,0 +1,12 @@
+{
+    "webServer": {
+      "oidc": {
+        "issuer": "https://rain.okta1.com/oauth2/default",
+        "scope": "openid profile email",
+        "client_id": "cid-111",
+        "client_secret": "cs-222",
+        "redirect_uri": "http://localhost:9191/authorization-code/callback"
+      },
+      "port": 9191
+    }
+  }

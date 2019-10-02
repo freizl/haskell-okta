@@ -15,7 +15,7 @@ import           Data.ByteString.Lazy (ByteString)
 import           Data.Either
 import           Test.Hspec
 
-import           Okta.Samples.Token
+import           Okta.Samples.Common.Token
 
 import           Specs.Internal
 
@@ -28,5 +28,5 @@ validIdToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IktJRF81M2I0MWVlZTQ4MzdhYTJhNDFiMTEx
 spec :: Spec
 spec = describe "Token" $
   it "parse success response" $ do
-    let jwt = decodeCompact validIdToken :: Either Error JWT
+    let jwt = decodeCompact validIdToken :: Either Error SignedJWT
     jwt `shouldSatisfy` isRight

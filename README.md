@@ -24,9 +24,8 @@ TODO: yaml or dhall; passed as parameter
 
 # TODO
 
+- [ ] unit test is broken
 - [ ] use `.well-known` endpoint to fetch authenticate url and issuer.
-- [ ] can travis have both haskell and node?
 - [ ] add stylish-haskell and hlint as dependencies
 - [ ] sample app shall be able to take a file parameter for reading configs
-- [ ] unit test is broken
 - [ ] add nix-build (which is very fast in CI)

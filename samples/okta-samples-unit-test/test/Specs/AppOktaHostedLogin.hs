@@ -1,23 +1,26 @@
+
+
 {-# LANGUAGE OverloadedStrings #-}
 
-module Specs.App (
+module Specs.AppOktaHostedLogin (
   spec
   ) where
 
+import qualified Data.ByteString.Char8      as BS
 import qualified Data.ByteString.Lazy.Char8 as BS8
 import           Data.String
 import qualified Network.Wai                as WAI
 import           Test.Hspec
 import           Test.Hspec.Wai
 
-import           Okta.Samples.App
-import           Okta.Samples.Types
+import           AppOktaHostedLogin
+import           Okta.Samples.Common.Types
 
 import           Specs.Internal
 
 spec :: Spec
 spec =
-  loginCustomS *>
+  loginRedirectS *>
   profileS *>
   logoutS *>
   callbackS *>
@@ -32,18 +35,30 @@ homeS = with (testApp sampleConfig) $
       html <- liftIO overviewPage
       get "/" `shouldRespondWith` fromString html
 
-loginCustomS :: Spec
-loginCustomS = with (testApp sampleConfig) $
+loginRedirectS :: Spec
+loginRedirectS = with (testApp sampleConfig) $
   describe "GET /login" $ do
-    it "responds with 200" $
-      get "/login" `shouldRespondWith` 200
-    it "responds scenarios page when no user session" $ do
-      html <- liftIO loginCustomPage
-      get "/login" `shouldRespondWith` fromString html
+    it "responds with 302" $
+      get "/login" `shouldRespondWith` 302
+    it "responds scenarios page when no user session" $
+      get "/login"
+      `shouldRespondWith`
+      302 {matchHeaders = ["Location" <:> BS.pack (
+        "https://rain.okta1.com/oauth2/default/v1/authorize" ++
+        "?" ++
+        "client_id=cid-111&" ++
+        "response_type=code&" ++
+        "response_mode=query&" ++
+        "scope=openid profile email&" ++
+        "redirect_uri=http://localhost:9191/authorization-code/callback&" ++
+        "state=okta-hosted-login-state-xyz&" ++
+        "nonce=okta-hosted-login-nonce-123"
+      )]}
     it "redirect to user profile when user session presents" $
       getWithUserCookie "/login"
       `shouldRespondWith`
       302 {matchHeaders = ["Location" <:> "/profile"]}
+
 
 profileS :: Spec
 profileS = with (testApp sampleConfig) $
@@ -75,34 +90,23 @@ callbackS = with (testApp sampleConfig) $
     it "show error when error parameter is found" $
       get "/authorization-code/callback?error=not_assigned"
       `shouldRespondWith`
-      401 { matchBody = matchBody_ (BS8.pack "not_assigned :") }
+      401 { matchBody = matchBody_ (BS8.pack "<h1>Error</h1><p>not_assigned :</p><div><a href=\"/\">Back to home</a></div>") }
     it "show error when error and error_description parameters are found" $
       get "/authorization-code/callback?error=not_assigned&error_description=user is not assigned to the app"
       `shouldRespondWith`
-      401 { matchBody = matchBody_ (BS8.pack "not_assigned : user is not assigned to the app") }
+      401 { matchBody = matchBody_ (BS8.pack "<h1>Error</h1><p>not_assigned : user is not assigned to the app</p><div><a href=\"/\">Back to home</a></div>") }
     it "show error when no code parameter is received" $
       get "/authorization-code/callback"
       `shouldRespondWith`
-      401 { matchBody = matchBody_ (BS8.pack "no code found from callback request") }
+      401 { matchBody = matchBody_ (BS8.pack "<h1>Error</h1><p>no code found from callback request</p><div><a href=\"/\">Back to home</a></div>") }
     it "show error when no state parameter is received" $
       get "/authorization-code/callback?code=abc123"
       `shouldRespondWith`
-      401 { matchBody = matchBody_ (BS8.pack "no state found from callback request") }
-    it "show error when no okta-oauth-nonce is found in the cookie" $
+      401 { matchBody = matchBody_ (BS8.pack "<h1>Error</h1><p>no state found from callback request</p><div><a href=\"/\">Back to home</a></div>") }
+    it "show error when state parameter does not match the state provided in the authorize request" $
       get "/authorization-code/callback?code=abc123&state=890def"
       `shouldRespondWith`
-      401 { matchBody = matchBody_ (BS8.pack "no nonce found in the cookie") }
-    it "show error when no okta-oauth-state is found in the cookie" $
-      getWithCookie "/authorization-code/callback?code=abc123&state=890def" "okta-oauth-nonce=nonce-890"
-      `shouldRespondWith`
-      401 { matchBody = matchBody_ (BS8.pack "no state found in the cookie") }
-    it "show error when state parameter does not match the okta-oauth-state in the cookie" $
-      getWithCookie "/authorization-code/callback?code=abc123&state=890def" "okta-oauth-nonce=nonce-345;okta-oauth-state=state-345"
-      `shouldRespondWith`
-      401 { matchBody = matchBody_ (BS8.pack $ unlines ["state is not match: "
-                                                       , "state parameter: 890def"
-                                                       , "state cookie: state-345"
-                                                       ])}
+      401 { matchBody = matchBody_ (BS8.pack "<h1>Error</h1><p>state is not match. state from parameter is: 890def . state from cookie is: okta-hosted-login-state-xyz</p><div><a href=\"/\">Back to home</a></div>")}
 
 matchBody_ :: BS8.ByteString -> MatchBody
 matchBody_ expected = MatchBody (\_ actual -> actualExpected "body mismatch:" actual expected)

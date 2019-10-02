@@ -27,7 +27,9 @@ app opt = do
   cf <- readConfigFile
   case cf of
     Left l  -> print l
-    Right c -> Okta.runApp opt c $ do
+    Right c -> Okta.runApp c (waiApp opt c)
+
+waiApp opt c = Okta.waiApp opt $ do
       get "/" resourceServerHomeH
       get "/api/messages" $ messageGetH c
       options "/api/messages" $ messageOptionH

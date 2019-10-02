@@ -16,6 +16,18 @@ description:         Please see the README on Github at <https://github.com/frei
 dependencies:
 - base >= 4.7 && < 5
 
+library:
+  source-dirs: app
+  exposed-modules:
+      AppCustomLogin
+  ghc-options:
+    - -Wall
+  dependencies:
+    - lens
+    - unordered-containers
+    - scotty
+    - okta-samples-common
+
 executables:
   custom-login-exe:
     main:                Main.hs
@@ -31,27 +43,3 @@ executables:
     - unordered-containers
     - scotty
     - okta-samples-common
-
-tests:
-  custom-login-test:
-    main:                Spec.hs
-    source-dirs:         test
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - http-types
-    - bytestring
-    - text
-    - lens
-    - jose
-    - aeson
-    - process
-    - wai-extra
-    - tasty
-    - tasty-hspec
-    - tasty-ant-xml
-    - hspec
-    - hspec-wai
-    - wai

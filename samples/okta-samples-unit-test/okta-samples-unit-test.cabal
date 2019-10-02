@@ -4,9 +4,9 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9c397d40cac4c9b25d4b35300b0615b93be7658e8b7551bae89f0eda4fd92b9a
+-- hash: d490c5042870e45c7a4a17b4e52dc626fc2300dab621553727f22b8e6fca60b0
 
-name:           okta-samples-common
+name:           okta-samples-unit-test
 version:        0.1.0.0
 description:    Please see the README on GitHub at <https://github.com/freizl/samples-common#readme>
 homepage:       https://github.com/freizl/samples-common#readme
@@ -24,45 +24,37 @@ source-repository head
   type: git
   location: https://github.com/freizl/samples-common
 
-library
-  exposed-modules:
-      Data.Aeson.Okta.Ext
-      Okta.Samples.Common.JWT
-      Okta.Samples.Common.Templates
-      Okta.Samples.Common.Token
-      Okta.Samples.Common.Types
-      Okta.Samples.Common.URIs
-      Okta.Samples.Common.Utils
-      Web.Scotty.Okta.App
-      Web.Scotty.Okta.Handlers
-      Web.Scotty.Okta.Sessions
-      Web.Scotty.Okta.Utils
-      Web.Scotty.Okta.Views
+test-suite okta-samples-unit-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
   other-modules:
-      Paths_okta_samples_common
+      Specs.AppCustomLogin
+      Specs.AppOktaHostedLogin
+      Specs.Config
+      Specs.Internal
+      Specs.Token
+      Paths_okta_samples_unit_test
   hs-source-dirs:
-      src
-  ghc-options: -Wall
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aeson
     , base >=4.7 && <5
-    , binary
     , bytestring
-    , cookie
-    , http-conduit
+    , custom-login
+    , hspec
+    , hspec-wai
     , http-types
     , jose
     , lens
     , lucid
-    , monad-time
-    , mtl
-    , network-uri
-    , scotty
+    , okta-hosted-login
+    , okta-samples-common
+    , process
+    , tasty
+    , tasty-ant-xml
+    , tasty-hspec
     , text
-    , time
-    , unordered-containers
     , wai
     , wai-extra
-    , wai-middleware-static
-    , warp
   default-language: Haskell2010

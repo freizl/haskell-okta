@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.0.
+-- This file has been generated from package.yaml by hpack version 0.32.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 65b47c2eb5d56376b2a87e57b0f72e7efdd1a68e191c7c58b595cbf1d0d27023
+-- hash: a8782064710a2f859c0bf7c6b1f5aa4cc47ee89a7bb0bcfa4b116a242b47976b
 
 name:           custom-login
 version:        0.1.0.0
@@ -24,10 +24,27 @@ source-repository head
   type: git
   location: https://github.com/freizl/haskell-okta
 
+library
+  exposed-modules:
+      AppCustomLogin
+  other-modules:
+      Main
+      Paths_custom_login
+  hs-source-dirs:
+      app
+  ghc-options: -Wall
+  build-depends:
+      base >=4.7 && <5
+    , lens
+    , okta-samples-common
+    , scotty
+    , unordered-containers
+  default-language: Haskell2010
+
 executable custom-login-exe
   main-is: Main.hs
   other-modules:
-      App
+      AppCustomLogin
       Paths_custom_login
   hs-source-dirs:
       app
@@ -38,34 +55,4 @@ executable custom-login-exe
     , okta-samples-common
     , scotty
     , unordered-containers
-  default-language: Haskell2010
-
-test-suite custom-login-test
-  type: exitcode-stdio-1.0
-  main-is: Spec.hs
-  other-modules:
-      Specs.App
-      Specs.Config
-      Specs.Internal
-      Specs.Token
-      Paths_custom_login
-  hs-source-dirs:
-      test
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      aeson
-    , base >=4.7 && <5
-    , bytestring
-    , hspec
-    , hspec-wai
-    , http-types
-    , jose
-    , lens
-    , process
-    , tasty
-    , tasty-ant-xml
-    , tasty-hspec
-    , text
-    , wai
-    , wai-extra
   default-language: Haskell2010

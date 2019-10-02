@@ -1,3 +1,5 @@
+
+
 {-# LANGUAGE OverloadedStrings #-}
 
 module Specs.Config
@@ -6,7 +8,7 @@ module Specs.Config
   ) where
 
 import           Data.Either
-import           Okta.Samples.Utils
+import           Okta.Samples.Common.Utils
 import           Test.Hspec
 
 import           Specs.Internal

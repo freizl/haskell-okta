@@ -35,7 +35,7 @@ errorM :: Text -> ActionM ()
 errorM = throwError . ActionError
 
 globalErrorHandler :: Text -> ActionM ()
-globalErrorHandler t = status status401 >> html t
+globalErrorHandler t = status status401 >> errorTpl t
 
 homeH :: ActionM ()
 homeH = getCookieUserM >>= homeTpl
@@ -91,11 +91,11 @@ authorizeCallbackH c astate anonce= do
   when (null stateP) (errorM "no state found from callback request")
   when (null nonceC) (errorM "no nonce found in the cookie")
   when (null stateC) (errorM "no state found in the cookie")
-  when (stateP /= stateC) (errorM $
-                           T.unlines $
-                           ["state is not match: "] ++
-                           [T.unwords $ "state parameter:": stateP] ++
-                           [T.unwords $ "state cookie:": stateC]
+  when (stateP /= stateC) (errorM $ T.unwords $
+                           ["state is not match. state from parameter is:" ]
+                           ++ stateP
+                           ++ [ ". state from cookie is:" ]
+                           ++ stateC
                           )
   -- successful flow
   handleAuthCallback c codeP nonceC

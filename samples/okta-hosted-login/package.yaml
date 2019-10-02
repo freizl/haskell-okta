@@ -14,7 +14,20 @@ extra-source-files:
 description:         Please see the README on Github at <https://github.com/freizl/haskell-okta/okta-hosted-login>
 
 dependencies:
-- base >= 4.7 && < 5
+  - base >= 4.7 && < 5
+
+library:
+  source-dirs: App
+  exposed-modules:
+      AppOktaHostedLogin
+  ghc-options:
+    - -Wall
+  dependencies:
+    - lens
+    - unordered-containers
+    - scotty
+    - text
+    - okta-samples-common
 
 executables:
   okta-hosted-login-exe:
@@ -51,28 +64,3 @@ executables:
     - mtl
     - lucid
     - okta-samples-common
-
-tests:
-  okta-hosted-login-test:
-    main:                Spec.hs
-    source-dirs:         test
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - okta-hosted-login
-    - http-types
-    - bytestring
-    - text
-    - lens
-    - jose
-    - aeson
-    - process
-    - wai-extra
-    - tasty
-    - tasty-hspec
-    - tasty-ant-xml
-    - hspec
-    - hspec-wai
-    - wai

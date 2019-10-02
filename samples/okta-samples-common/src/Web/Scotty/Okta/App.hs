@@ -21,13 +21,13 @@ import           Web.Scotty.Okta.Handlers
 -- App
 ------------------------------
 
-runApp :: AppOption -> Config -> ScottyM () -> IO ()
-runApp opt c extraScotty = putStrLn ("Starting Server at http://localhost:" ++ show (c ^. port))
-               >> waiApp opt c extraScotty
+runApp :: Config -> IO WAI.Application -> IO ()
+runApp c app = putStrLn ("Starting Server at http://localhost:" ++ show (c ^. port))
+               >> app
                >>= run (c ^. port)
 
-waiApp :: AppOption -> Config -> ScottyM () -> IO WAI.Application
-waiApp opt c extraScotty =
+waiApp :: AppOption -> ScottyM () -> IO WAI.Application
+waiApp opt extraScotty =
   scottyApp $ do
     when (opt ^. appServerDebug) (middleware logStdoutDev)
     middleware $ staticPolicy (mapAssetsDir >-> addBase "public")
@@ -37,4 +37,3 @@ waiApp opt c extraScotty =
 mapAssetsDir :: Policy
 mapAssetsDir = policy removeAssetsPrefix
   where removeAssetsPrefix s = stripPrefix "assets/" s CA.<|> Just s
-

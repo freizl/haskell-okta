@@ -1,4 +1,6 @@
-{{-# LANGUAGE OverloadedStrings #-}
+
+
+{-# LANGUAGE OverloadedStrings #-}
 
 module Specs.Internal where
 
@@ -8,30 +10,31 @@ import qualified Data.ByteString           as BS
 import qualified Data.ByteString.Lazy      as BSL
 import           Data.String
 import qualified Data.Text.Lazy            as TL
+import qualified Lucid.Base                    as H
 import           Network.HTTP.Types.Header
 import           Network.HTTP.Types.Method
 import           Network.Wai.Test          (SResponse)
 import           Prelude                   hiding (exp)
 import           Test.Hspec.Wai
 
-import           Okta.Samples.Template
-import           Okta.Samples.Types
+import           Okta.Samples.Common.Templates
+import           Okta.Samples.Common.Types
 
 
 overviewPage :: IO String
-overviewPage = TL.unpack <$> tplS "home" Nothing sampleConfig
+overviewPage = return . TL.unpack . H.renderText $ homeH_ Nothing
 
 loginCustomPage :: IO String
-loginCustomPage = TL.unpack <$> tplS "login" Nothing sampleConfig
+loginCustomPage = return . TL.unpack . H.renderText $ loginH_ sampleConfig
 
 profilePage :: IO String
-profilePage = TL.unpack <$> tplS "profile" (Just sampleCookieUser) sampleConfig
+profilePage = return . TL.unpack . H.renderText $ profileH_ sampleCookieUser
 
 
-getWithUserCookie :: ByteString -> WaiSession SResponse
+getWithUserCookie :: ByteString -> WaiSession st SResponse
 getWithUserCookie path = getWithCookie path userCookie
 
-getWithCookie :: ByteString -> ByteString -> WaiSession SResponse
+getWithCookie :: ByteString -> ByteString -> WaiSession st SResponse
 getWithCookie path cookies = request methodGet path [(hCookie, cookies)] ""
 
 userCookie :: ByteString
@@ -50,10 +53,10 @@ sampleCookieUser = UserInfo
 
 
 sampleConfig :: Config
-sampleConfig = Config o 8080
-  where o = OIDC { _configScope = "openid profile email"
-                 , _issuer = "https://rain.okta1.com/oauth2/default"
-                 , _clientId = "0oaqbcmJ3FnbdgxF40g3"
-                 , _clientSecret = "RO_574ekzr2WieopIcYzDnfeOCHPAv5Bq6-AbLMm"
-                 , _redirectUri = "http://localhost:8080/authorization-code/callback"
+sampleConfig = Config o 9191
+  where o = OIDC { _oidcScope = "openid profile email"
+                 , _oidcIssuer = "https://rain.okta1.com/oauth2/default"
+                 , _oidcClientId = "cid-111"
+                 , _oidcClientSecret = "cs-222"
+                 , _oidcRedirectUri = "http://localhost:9191/authorization-code/callback"
                  }
