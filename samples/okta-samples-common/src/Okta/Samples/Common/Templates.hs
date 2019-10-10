@@ -28,7 +28,6 @@ headH_ :: H.Html ()
 headH_ = head_ $
   meta_ [charset_ "UTF-8"]
   <> title_ "Express Sample App"
-  <> link_ [href_ "/assets/css/semantic.min.css", type_ "text/css", rel_ "stylesheet"]
   <> link_ [href_ "/assets/css/samples.css", type_ "text/css", rel_ "stylesheet"]
   <> base_ [href_ "/"]
 
@@ -36,17 +35,17 @@ menuH_ :: Maybe CookieUser -> H.Html ()
 menuH_ muser =
   let menus = case muser of
                 Nothing -> mempty
-                Just _ -> a_ [id_ "profile-button", class_ "item", href_ "/profile", datase_ "profile"] "My Profile"
+                Just _ -> li_ [] (a_ [id_ "profile-button", class_ "item", href_ "/profile", datase_ "profile"] "My Profile")
                           <>
-                          a_ [id_ "logout-button", class_ "item", href_ "/logout", datase_ "logout"] "Logout"
+                          li_ [] (a_ [id_ "logout-button", class_ "item", href_ "/logout", datase_ "logout"] "Logout")
   in
   div_ [class_ "ui inverted left fixed vertical menu"]
   (
-    a_ [href_ "/", class_ "item", id_ "item-overview"] "Home"
-    <>
-    div_ [id_ "section-authorization-code", class_ "item"]
+    ul_ []
     (
-      div_ [class_ "menu"] menus
+      li_ [] (a_ [href_ "/", class_ "item", id_ "item-overview"] "Home")
+      <>
+      menus
     )
   )
 
@@ -56,7 +55,7 @@ homeMessageH_ Nothing =
   (
     p_ "Hello!"
     <>
-    p_ "If you're viewing this page then you have successfully configured this example server.  Your server configuration is listed on the right."
+    p_ "If you're viewing this page then you have successfully configured this example server.  Your server configuration is listed on the right. (TODO) "
     <>
     p_
     (
@@ -101,7 +100,7 @@ profileH_ user = baseH_ (Just user) $
     <>
     a_ [href_ "https://developer.okta.com/docs/api/resources/oidc#get-user-information"] "User Info Endpoint"
     <>
-    span_ " with your Access Token."
+    span_ " with your ID Token."
   )
   <>
   table_ [class_ "ui table compact collapsing"]

@@ -13,30 +13,6 @@ a:link, a:visited, a:active {
   font-size: 15px;
 }
 
-/* Getting Started ************************************************************/
-
-#getting-started {
-  margin-bottom: 70px;
-  font-weight: bold;
-  color:#000 !important;
-  padding-top: 12px;
-  padding-bottom: 14px;
-}
-
-#getting-started a:link,
-#getting-started a:visited,
-#getting-started a:active {
-  color: #000;
-  text-decoration: underline;
-}
-
-#getting-started h3 {
-  display: inline;
-  font-size: 1.18rem;
-  position: relative;
-  top: 3px;
-}
-
 /* Documentation **************************************************************/
 
 #content {

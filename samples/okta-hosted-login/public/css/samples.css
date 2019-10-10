@@ -1,43 +1,28 @@
 
 /* General ********************************************************************/
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
-a:link, a:visited, a:active {
-  color: #4183C4;
+a:link,
+a:visited,
+a:active {
+  color: #4183c4;
 }
 
-#samples, #samples .ui.menu, #samples .ui.table {
+#samples,
+#samples .ui.menu,
+#samples .ui.table {
   font-size: 15px;
 }
 
-/* Getting Started ************************************************************/
-
-#getting-started {
-  margin-bottom: 70px;
-  font-weight: bold;
-  color:#000 !important;
-  padding-top: 12px;
-  padding-bottom: 14px;
-}
-
-#getting-started a:link,
-#getting-started a:visited,
-#getting-started a:active {
-  color: #000;
-  text-decoration: underline;
-}
-
-#getting-started h3 {
-  display: inline;
-  font-size: 1.18rem;
-  position: relative;
-  top: 3px;
-}
-
 /* Documentation **************************************************************/
+
+.menu {
+  float: left;
+}
 
 #content {
   padding-left: 15rem;
@@ -45,19 +30,10 @@ a:link, a:visited, a:active {
   height: 100%;
 }
 
-#doc {
-  padding-left: 42px;
-  padding-top: 29px;
-}
-
 #default-app-text {
   text-align: center;
   font-size: 20px;
   font-family: monospace;
-}
-
-.hljs {
-  padding: 0;
 }
 
 .ui.segment {
@@ -100,17 +76,17 @@ ol.ui.list li {
 
 .sample-col {
   border-left: 3px solid #000;
-  color: #F0EBD8;
+  color: #f0ebd8;
 }
 
 .sample-col .ui.header {
-  color: #F0EBD8;
+  color: #f0ebd8;
 }
 
-.ui.grid>.sample-col.column,
-.ui.grid>.sample-col.row,
-.ui.grid>.row>.sample-col.column {
-  background-color: #312F2F;
+.ui.grid > .sample-col.column,
+.ui.grid > .sample-col.row,
+.ui.grid > .row > .sample-col.column {
+  background-color: #312f2f;
   margin-top: 0;
   margin-bottom: 0;
   padding-top: 1rem;
@@ -164,7 +140,7 @@ ol.ui.list li {
 }
 
 #okta-sign-in h2 {
-  color: #F0EBD8;
+  color: #f0ebd8;
   font-weight: normal;
 }
 
@@ -182,13 +158,13 @@ ol.ui.list li {
 #okta-sign-in .button-primary {
   border-width: 0;
   border-radius: 0;
-  background: #899D78;
+  background: #899d78;
 }
 
 #okta-sign-in .button-primary:hover,
 #okta-sign-in .button-primary:focus,
 #okta-sign-in .button-primary:active {
-  background: #9EAE90;
+  background: #9eae90;
 }
 
 #okta-sign-in .okta-form-input-field {
@@ -196,4 +172,24 @@ ol.ui.list li {
   border-radius: 0;
   background-color: #fff;
   color: #777;
+}
+
+/* Elements ***************************************************************/
+
+.button {
+  display: inline-block;
+  position: relative;
+  margin: 0;
+  padding: 0.375em 1.5em;
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-duration: 100ms;
+  transition-timing-function: linear;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  background-color: #1662dd;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+  box-shadow: 0 0 0 0 #a2c0f1;
 }
