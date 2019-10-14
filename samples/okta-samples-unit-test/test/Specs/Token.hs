@@ -11,7 +11,7 @@ import           Crypto.JOSE.Compact
 import           Crypto.JOSE.Error
 import           Crypto.JWT
 
-import           Data.ByteString.Lazy (ByteString)
+import           Data.ByteString.Lazy      (ByteString)
 import           Data.Either
 import           Test.Hspec
 

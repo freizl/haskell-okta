@@ -4,7 +4,7 @@ module Main where
 
 import           System.Environment
 
-import           AppCustomLogin                       (app)
+import           AppCustomLogin            (app)
 import           Okta.Samples.Common.Types
 
 main :: IO ()

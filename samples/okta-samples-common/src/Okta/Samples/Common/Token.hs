@@ -28,29 +28,28 @@ import           Network.HTTP.Types.Status
 import           Prelude                    hiding (exp)
 
 import           Okta.Samples.Common.JWT
+import           Okta.Samples.Common.OIDC
 import           Okta.Samples.Common.Types
-import           Okta.Samples.Common.URIs
 import           Okta.Samples.Common.Utils
 
 
 fetchAuthUser :: Config
+              -> OpenIDConfiguration
               -> Code
               -> Nonce
               -> ExceptT Text IO UserInfo
-fetchAuthUser c codeP nonceP = do
-  tokenResp <- fetchToken c codeP
+fetchAuthUser c openidConfig codeP nonceP = do
+  tokenResp <- fetchToken c openidConfig codeP
   jwtData <- decodeIdToken tokenResp
-  _ <- verifyJWTToken c nonceP jwtData
-  fetchUserInfo c (tokenResp ^. accessToken)
-  -- TODO: to verify access Token since the demo primarily work with custom AS
-  -- which access token is JWT
+  _ <- verifyJWTToken c openidConfig nonceP jwtData
+  fetchUserInfo openidConfig (tokenResp ^. accessToken)
+  -- TODO: maybe verify access Token
 
 
-fetchUserInfo :: Config -> AccessToken -> ExceptT Text IO UserInfo
-fetchUserInfo c atk = ExceptT $ do
-  req <- updateUserInfoRequest atk <$> parseRequest (TL.unpack $ (c ^. (oidc . oidcIssuer)) <> userinfoUrl)
+fetchUserInfo :: OpenIDConfiguration -> AccessToken -> ExceptT Text IO UserInfo
+fetchUserInfo openidConfig atk = ExceptT $ do
+  req <- updateUserInfoRequest atk <$> parseRequest (TL.unpack $ openidConfig ^. userinfoEndpoint)
   resp <- httpLbs req
-  -- print (getResponseBody resp)
   return (handleUserInfoResponse resp)
 
 handleUserInfoResponse :: Response ByteString -> Either Text UserInfo
@@ -67,20 +66,21 @@ updateUserInfoRequest token = addBearer . addHA
         addBearer = addRequestHeader hAuthorization (BS.toStrict $ TL.encodeUtf8 $ "Bearer " `TL.append` token)
 
 verifyJWTToken :: Config
+              -> OpenIDConfiguration
               -> Nonce
               -> SignedJWT
               -> ExceptT Text IO SignedJWT
-verifyJWTToken c nonceP jwtData = do
-  jwks <- fetchKeys c
+verifyJWTToken c oc nonceP jwtData = do
+  jwks <- fetchKeys oc
   verifyJwtData c nonceP jwks jwtData
 
-fetchToken :: Config -> Code -> ExceptT Text IO TokenResponse
-fetchToken c codeP = ExceptT $ do
-  req <- genTokenRequest c codeP
+fetchToken :: Config -> OpenIDConfiguration -> Code -> ExceptT Text IO TokenResponse
+fetchToken c oc codeP = ExceptT $ do
+  req <- genTokenRequest c oc codeP
   handleTokenResponse <$> httpLbs req
 
-genTokenRequest :: Config -> Code -> IO Request
-genTokenRequest c codeP = updateTokenRequest c codeP <$> parseRequest (TL.unpack $ (c ^. (oidc . oidcIssuer)) <> tokenUrl)
+genTokenRequest :: Config -> OpenIDConfiguration -> Code -> IO Request
+genTokenRequest c oc codeP = updateTokenRequest c codeP <$> parseRequest (TL.unpack $ (oc ^. tokenEndpoint))
 
 handleTokenResponse :: Response ByteString -> Either Text TokenResponse
 handleTokenResponse resp = do
@@ -116,13 +116,13 @@ decodeIdToken eitherResp =
    ExceptT $ return $ first (TL.pack . show) (decodeCompact (TL.encodeUtf8 t) :: Either Error SignedJWT)
 
 
-fetchKeys :: Config -> ExceptT TL.Text IO [JWK]
-fetchKeys c = ExceptT $ do
-  req <- genKeysRequest c
+fetchKeys :: OpenIDConfiguration -> ExceptT TL.Text IO [JWK]
+fetchKeys oc = ExceptT $ do
+  req <- genKeysRequest oc
   handleKeysResponse <$> httpLbs req
 
-genKeysRequest :: Config -> IO Request
-genKeysRequest c = updateH <$> parseRequest (TL.unpack $ (c ^. (oidc . oidcIssuer)) <> keyUrl)
+genKeysRequest :: OpenIDConfiguration -> IO Request
+genKeysRequest oc = updateH <$> parseRequest (TL.unpack $ (oc ^. jwksUri))
   where updateH = addRequestHeader hAccept "application/json"
 
 handleKeysResponse :: Response ByteString -> Either Text [JWK]

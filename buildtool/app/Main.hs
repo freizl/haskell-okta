@@ -60,10 +60,8 @@ command_ TestE2E        = teste2e
 lint :: IO ()
 lint = pl
   [ sh "stack exec hlint samples/custom-login/app "
-  , sh "stack exec hlint samples/custom-login/test"
   , sh "stack exec hlint samples/okta-hosted-login/app"
-  , sh "stack exec hlint samples/okta-hosted-login/test"
-  , sh "stack exec hlint samples/okta-samples-common/test"
+  , sh "stack exec hlint samples/okta-samples-unit-test/test"
   , sh "stack exec hlint samples/okta-samples-common/src"
   , sh "stack exec hlint buildtool/app"
   ]
@@ -71,15 +69,12 @@ lint = pl
 stylish :: IO ()
 stylish = pl
   [ sh "stack exec stylish-haskell -- -i samples/custom-login/app/*.hs"
-  , sh "stack exec stylish-haskell -- -i samples/custom-login/test/Specs/*.hs"
-  , sh "stack exec stylish-haskell -- -i samples/custom-login/test/*.hs"
   , sh "stack exec stylish-haskell -- -i samples/okta-hosted-login/app/*.hs"
-  , sh "stack exec stylish-haskell -- -i samples/okta-hosted-login/test/Specs/*.hs"
-  , sh "stack exec stylish-haskell -- -i samples/okta-hosted-login/test/*.hs"
   , sh "stack exec stylish-haskell -- -i samples/okta-samples-common/src/Okta/Samples/Common/*.hs"
   , sh "stack exec stylish-haskell -- -i samples/okta-samples-common/src/Data/Aeson/Okta/*.hs"
   , sh "stack exec stylish-haskell -- -i samples/okta-samples-common/src/Web/Scotty/Okta/*.hs"
-  , sh "stack exec stylish-haskell -- -i samples/okta-samples-common/test/*.hs"
+  , sh "stack exec stylish-haskell -- -i samples/okta-samples-unit-test/test/*.hs"
+  , sh "stack exec stylish-haskell -- -i samples/okta-samples-unit-test/test/Specs/*.hs"
   , sh "stack exec stylish-haskell -- -i buildtool/app/*.hs"
   ]
 

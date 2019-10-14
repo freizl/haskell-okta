@@ -18,9 +18,9 @@ import           Data.Maybe
 import           Web.Scotty
 import           Web.Scotty.Internal.Types
 
+import           Okta.Samples.Common.OIDC
 import           Okta.Samples.Common.Token
 import           Okta.Samples.Common.Types
-import           Okta.Samples.Common.URIs
 import           Web.Scotty.Okta.Sessions
 import           Web.Scotty.Okta.Utils
 import           Web.Scotty.Okta.Views
@@ -43,8 +43,8 @@ homeH = getCookieUserM >>= homeTpl
 loginCustomH :: Config -> ActionM ()
 loginCustomH c = withCookieUserM (const redirectToProfileM) (loginCustomTpl c)
 
-loginToOkta :: Config -> Text -> Text -> ActionM ()
-loginToOkta c astate anonce =
+loginToOkta :: Config -> OpenIDConfiguration -> Text -> Text -> ActionM ()
+loginToOkta c openidConfig astate anonce =
   let oc = c ^. oidc
       concatParam (a, b) = T.intercalate "=" [a, b]
       queryStr = T.intercalate "&" $ map concatParam [ ("client_id", oc ^. oidcClientId)
@@ -55,8 +55,7 @@ loginToOkta c astate anonce =
                                     , ("state", astate)
                                     , ("nonce", anonce)
                                     ]
-      fullurl = T.concat [ c ^. oidc . oidcIssuer
-                          , authorizeUrl
+      fullurl = T.concat [ openidConfig ^. authorizationEndpoint
                           , "?"
                           , queryStr
                           ]
@@ -71,10 +70,11 @@ logoutH :: ActionM ()
 logoutH = deleteCookieUserM >> redirectToHomeM
 
 authorizeCallbackH :: Config
+          -> OpenIDConfiguration
           -> Maybe Text -- ^ state
           -> Maybe Text -- ^ nonce
           -> ActionM ()
-authorizeCallbackH c astate anonce= do
+authorizeCallbackH c openidConfig astate anonce= do
   let stateC = maybeToList astate
   let nonceC = maybeToList anonce
 
@@ -98,12 +98,12 @@ authorizeCallbackH c astate anonce= do
                            ++ stateC
                           )
   -- successful flow
-  handleAuthCallback c codeP nonceC
+  handleAuthCallback c openidConfig codeP nonceC
 
 
-handleAuthCallback :: Config -> [Text] -> [Text] -> ActionM ()
-handleAuthCallback c codeP nonceC = do
-  r' <- liftIO $ runExceptT $ fetchAuthUser c (head codeP) (head nonceC)
+handleAuthCallback :: Config -> OpenIDConfiguration -> [Text] -> [Text] -> ActionM ()
+handleAuthCallback c openidConfig codeP nonceC = do
+  r' <- liftIO $ runExceptT $ fetchAuthUser c openidConfig (head codeP) (head nonceC)
   case r' of
     Right userInfo -> setCookieUserM (BS.toStrict $ encode userInfo) >> redirectToProfileM
     Left e -> errorM e

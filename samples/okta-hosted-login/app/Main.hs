@@ -6,7 +6,7 @@ import           GHC.IO.Handle
 import           GHC.IO.Handle.FD
 import           System.Environment
 
-import           AppOktaHostedLogin                       (app)
+import           AppOktaHostedLogin        (app)
 import           Okta.Samples.Common.Types
 
 main :: IO ()

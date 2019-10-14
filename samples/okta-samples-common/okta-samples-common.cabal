@@ -29,9 +29,9 @@ library
       Data.Aeson.Okta.Ext
       Okta.Samples.Common.JWT
       Okta.Samples.Common.Templates
+      Okta.Samples.Common.OIDC
       Okta.Samples.Common.Token
       Okta.Samples.Common.Types
-      Okta.Samples.Common.URIs
       Okta.Samples.Common.Utils
       Web.Scotty.Okta.App
       Web.Scotty.Okta.Handlers

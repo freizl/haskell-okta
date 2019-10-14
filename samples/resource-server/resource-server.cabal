@@ -27,7 +27,7 @@ source-repository head
 executable resource-server-exe
   main-is: Main.hs
   other-modules:
-      App
+      AppResourceServer
       Types
       Paths_resource_server
   hs-source-dirs:
@@ -41,5 +41,6 @@ executable resource-server-exe
     , okta-samples-common
     , scotty
     , text
+    , wai
     , unordered-containers
   default-language: Haskell2010

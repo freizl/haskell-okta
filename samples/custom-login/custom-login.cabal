@@ -39,6 +39,7 @@ library
     , okta-samples-common
     , scotty
     , unordered-containers
+    , wai
   default-language: Haskell2010
 
 executable custom-login-exe
@@ -55,4 +56,5 @@ executable custom-login-exe
     , okta-samples-common
     , scotty
     , unordered-containers
+    , wai
   default-language: Haskell2010

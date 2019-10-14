@@ -1,6 +1,6 @@
 name:                okta-samples-common
 version:             0.1.0.0
-github:              "freizl/samples-common"
+github:              "haskell-okta"
 license:             BSD3
 author:              "Haisheng Wu"
 maintainer:          "freizl@gmail.com"
@@ -16,7 +16,7 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/freizl/samples-common#readme>
+description:         Please see the README on GitHub at <https://github.com/haskell-okta#readme>
 
 dependencies:
 - base >= 4.7 && < 5

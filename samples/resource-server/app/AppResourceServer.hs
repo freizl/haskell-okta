@@ -1,20 +1,23 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module App (app) where
+module AppResourceServer (app) where
 
 import           Prelude                   hiding (exp)
 import           Web.Scotty
 import           Control.Monad
+import qualified Network.Wai                          as WAI
 
 import           Okta.Samples.Common.Types
 import           Okta.Samples.Common.Utils
-import qualified Data.Text as T
+import           Okta.Samples.Common.OIDC
+
+-- import qualified Data.Text as T
 import Data.Maybe
-import Web.Scotty
+-- import Web.Scotty
 import Network.HTTP.Types.Status
 import qualified Web.Scotty.Okta.App       as Okta
-import           Web.Scotty.Okta.Handlers
-import           Web.Scotty.Okta.Sessions
+-- import           Web.Scotty.Okta.Handlers
+-- import           Web.Scotty.Okta.Sessions
 
 import Types
 
@@ -29,7 +32,8 @@ app opt = do
     Left l  -> print l
     Right c -> Okta.runApp c (waiApp opt c)
 
-waiApp opt c = Okta.waiApp opt $ do
+waiApp :: AppOption -> Config -> OpenIDConfiguration -> IO WAI.Application
+waiApp opt c _ = Okta.waiApp opt $ do
       get "/" resourceServerHomeH
       get "/api/messages" $ messageGetH c
       options "/api/messages" $ messageOptionH
@@ -65,10 +69,10 @@ unAuthHandler :: ActionM ()
 unAuthHandler = status unauthorized401
 
 messageGetH :: Config -> ActionM ()
-messageGetH c = do
+messageGetH _ = do
   isauth <- isAuthH
   setHeader "Access-Control-Allow-Origin" "*"
-  when (not isauth) unAuthHandler
+  unless isauth unAuthHandler
   json $ MessageResponse
     [ Message "I am a robot."
     , Message "Hello, world!"

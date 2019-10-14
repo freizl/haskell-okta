@@ -4,17 +4,17 @@
 
 module Specs.Internal where
 
-import           Data.Aeson                (encode)
-import           Data.ByteString           (ByteString)
-import qualified Data.ByteString           as BS
-import qualified Data.ByteString.Lazy      as BSL
+import           Data.Aeson                    (encode)
+import           Data.ByteString               (ByteString)
+import qualified Data.ByteString               as BS
+import qualified Data.ByteString.Lazy          as BSL
 import           Data.String
-import qualified Data.Text.Lazy            as TL
+import qualified Data.Text.Lazy                as TL
 import qualified Lucid.Base                    as H
 import           Network.HTTP.Types.Header
 import           Network.HTTP.Types.Method
-import           Network.Wai.Test          (SResponse)
-import           Prelude                   hiding (exp)
+import           Network.Wai.Test              (SResponse)
+import           Prelude                       hiding (exp)
 import           Test.Hspec.Wai
 
 import           Okta.Samples.Common.Templates

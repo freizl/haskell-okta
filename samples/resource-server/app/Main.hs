@@ -2,7 +2,7 @@ module Main where
 
 import           System.Environment
 
-import           App                       (app)
+import           AppResourceServer                       (app)
 import           Okta.Samples.Common.Types
 
 main :: IO ()

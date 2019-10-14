@@ -9,8 +9,8 @@ import           Test.Tasty.Hspec
 import           Test.Tasty.Ingredients.Basic
 import           Test.Tasty.Runners.AntXML
 
-import qualified Specs.AppOktaHostedLogin as AppOktaHostedLogin
-import qualified Specs.AppCustomLogin as AppCustomLogin
+import qualified Specs.AppCustomLogin         as AppCustomLogin
+import qualified Specs.AppOktaHostedLogin     as AppOktaHostedLogin
 import qualified Specs.Config                 as SC
 import qualified Specs.Token                  as ST
 
