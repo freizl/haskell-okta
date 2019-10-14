@@ -25,7 +25,7 @@ TODO: yaml or dhall; passed as parameter
 # TODO
 
 - [X] unit test is broken
-- [ ] use `.well-known` endpoint to fetch authenticate url and issuer.
+- [X] use `.well-known` endpoint to fetch authenticate url and issuer.
 - [ ] add stylish-haskell and hlint as dependencies
 - [ ] sample app shall be able to take a file parameter for reading configs
 - [ ] add nix-build (which is very fast in CI)
