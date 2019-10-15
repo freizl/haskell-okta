@@ -40,10 +40,10 @@ fetchAuthUser :: Config
               -> ExceptT Text IO UserInfo
 fetchAuthUser c openidConfig codeP nonceP = do
   tokenResp <- fetchToken c openidConfig codeP
-  jwtData <- decodeIdToken tokenResp
-  _ <- verifyJWTToken c openidConfig nonceP jwtData
-  fetchUserInfo openidConfig (tokenResp ^. accessToken)
+  _ <- decodeIdToken tokenResp >>= verifyJWTToken c openidConfig nonceP
   -- TODO: maybe verify access Token
+  -- _ <- decodeAccessToken tokenResp >>= verifyJWTToken c openidConfig nonceP
+  fetchUserInfo openidConfig (tokenResp ^. accessToken)
 
 
 fetchUserInfo :: OpenIDConfiguration -> AccessToken -> ExceptT Text IO UserInfo

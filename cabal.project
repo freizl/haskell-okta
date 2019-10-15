@@ -1,6 +1,4 @@
 packages: buildtool/
           samples/okta-samples-common/
           samples/okta-samples-unit-test
-          samples/custom-login/
-          samples/okta-hosted-login/
-          samples/resource-server/
+          samples/login-with-okta/

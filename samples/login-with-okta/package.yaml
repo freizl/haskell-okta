@@ -1,4 +1,4 @@
-name:                custom-login
+name:                login-with-okta
 version:             0.1.0.0
 github:              "freizl/haskell-okta"
 license:             Apache-2.0
@@ -11,25 +11,27 @@ build-type:          Simple
 extra-source-files:
 - README.md
 
-description:         Please see the README on Github at <https://github.com/freizl/haskell-oktacustom-login>
+description:         Please see the README on Github at <https://github.com/freizl/haskell-okta/okta-hosted-login>
 
 dependencies:
-- base >= 4.7 && < 5
+  - base >= 4.7 && < 5
 
 library:
   source-dirs: app
   exposed-modules:
-      AppCustomLogin
+      LoginWithOkta
   ghc-options:
     - -Wall
   dependencies:
     - lens
     - unordered-containers
     - scotty
+    - text
+    - wai
     - okta-samples-common
 
 executables:
-  custom-login-exe:
+  login-with-okta-exe:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -37,9 +39,10 @@ executables:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
-    - -O
     dependencies:
     - lens
     - unordered-containers
     - scotty
+    - text
+    - wai
     - okta-samples-common

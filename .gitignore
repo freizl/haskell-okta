@@ -3,9 +3,7 @@ dist
 npm-debug.log
 yarn-debug.log
 .DS_Store
-samples/okta-hosted-login/.samples.config.json
-samples/custom-login/.samples.config.json
-./.samples.config.json
+.samples.config.json
 build2
 
 # Haskell

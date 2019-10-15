@@ -27,7 +27,7 @@ errorH_ er =
 headH_ :: H.Html ()
 headH_ = head_ $
   meta_ [charset_ "UTF-8"]
-  <> title_ "Express Sample App"
+  <> title_ "Sample App - Login with Okta"
   <> link_ [href_ "/assets/css/samples.css", type_ "text/css", rel_ "stylesheet"]
   <> base_ [href_ "/"]
 
@@ -55,7 +55,7 @@ homeMessageH_ Nothing =
   (
     p_ "Hello!"
     <>
-    p_ "If you're viewing this page then you have successfully configured this example server.  Your server configuration is listed on the right. (TODO) "
+    p_ "If you're viewing this page then you have successfully configured this example server.  Your server configuration is listed on the right. (TODO)"
     <>
     p_
     (
@@ -68,9 +68,14 @@ homeMessageH_ Nothing =
     <>
     p_ "When you click the login button below, you will be redirected to the login page on your local application."
     <>
-    form_ [method_ "get", action_ "/login"]
+    form_ [method_ "get", action_ "/login-redirect"]
     (
-      button_ [id_ "login-button", class_ "ui primary button", type_ "submit"] "Log In"
+      button_ [id_ "login-button", class_ "ui primary button", type_ "submit"] "Log In from Okta page"
+    )
+    <>
+    form_ [method_ "get", action_ "/login-siw"]
+    (
+      button_ [id_ "login-button", class_ "ui primary button", type_ "submit"] "Log In from customized SignIn Widget"
     )
   )
 
@@ -133,7 +138,7 @@ homeH_ :: Maybe CookieUser
          -> H.Html ()
 homeH_ muser = baseH_ muser
   (
-    h2_ [ class_ "ui dividing header", datase_ "overview-doc-header"] "Custom Login Example"
+    h2_ [ class_ "ui dividing header", datase_ "overview-doc-header"] "Login with Okta Examples"
     <>
     homeMessageH_ muser
   )

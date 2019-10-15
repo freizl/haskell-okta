@@ -1,2 +1,0 @@
-# Haskell + Okta Hosted Login Example
-This example shows you how to use Haskell to login to your application with a Custom Login page.  The login is achieved with the [Okta Sign In Widget][], which gives you more control to customize the login experience within your app.  After the user authenticates they are redirected back to the application with an authorization code that is then exchanged for an access token.

@@ -4,9 +4,9 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e66ce7ed0577126dff29ee8f7a159ba514a7b870ea66aa3da80714dbd6d8f0db
+-- hash: 66172a1ad7cce93e3bd7b1319298e6589a2a8a5883253cf3227d181118f40b2d
 
-name:           okta-hosted-login
+name:           login-with-okta
 version:        0.1.0.0
 description:    Please see the README on Github at <https://github.com/freizl/haskell-okta/okta-hosted-login>
 category:       Web
@@ -26,10 +26,10 @@ source-repository head
 
 library
   exposed-modules:
-      AppOktaHostedLogin
+      LoginWithOkta
   other-modules:
       Main
-      Paths_okta_hosted_login
+      Paths_login_with_okta
   hs-source-dirs:
       app
   ghc-options: -Wall
@@ -43,21 +43,20 @@ library
     , wai
   default-language: Haskell2010
 
-executable okta-hosted-login-exe
+executable login-with-okta-exe
   main-is: Main.hs
   other-modules:
-      AppOktaHostedLogin
-      Paths_okta_hosted_login
+      LoginWithOkta
+      Paths_login_with_okta
   hs-source-dirs:
       app
-  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N -O
+  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-    base >=4.7 && <5
+      base >=4.7 && <5
     , lens
     , okta-samples-common
     , scotty
     , text
     , unordered-containers
     , wai
-
   default-language: Haskell2010
