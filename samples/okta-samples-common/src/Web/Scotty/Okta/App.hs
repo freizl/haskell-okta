@@ -26,11 +26,10 @@ import           Web.Scotty.Okta.Handlers
 runApp :: Config -> (OpenIDConfiguration -> IO WAI.Application) -> IO ()
 runApp c app = do
   putStrLn ("Starting Server at http://localhost:" ++ show (c ^. port))
-  putStrLn "fetching .well-known/openid-configuration"
   openidConfiguration <- runExceptT (fetchWellKnown c)
   case openidConfiguration of
     Left e -> ioError $ userError $ "Cannot fetch openid configuration" ++ show e
-    Right oc -> putStrLn "find openid-configuration" >> app oc >>= run (c ^. port)
+    Right oc -> app oc >>= run (c ^. port)
 
 waiApp :: AppOption -> ScottyM () -> IO WAI.Application
 waiApp opt extraScotty =

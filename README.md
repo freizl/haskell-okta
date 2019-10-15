@@ -26,8 +26,10 @@ TODO: yaml or dhall; passed as parameter
 
 - [X] unit test is broken
 - [X] use `.well-known` endpoint to fetch authenticate url and issuer.
-- [ ] merge `custom-login` and `okta-hosted-login`
+- [x] merge `custom-login` and `okta-hosted-login`
 - [ ] how to package static assets?
+- [ ] fix unit test
+- [ ] clear cookie that set by SIW when start up
 - [ ] add stylish-haskell and hlint as dependencies
 - [ ] sample app shall be able to take a file parameter for reading configs
 - [ ] add nix-build (which is very fast in CI)

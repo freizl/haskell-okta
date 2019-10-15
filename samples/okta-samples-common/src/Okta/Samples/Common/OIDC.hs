@@ -39,7 +39,7 @@ wellknownUrl = "/.well-known/openid-configuration"
 fetchWellKnown :: Config -> ExceptT Text IO OpenIDConfiguration
 fetchWellKnown c = ExceptT $ do
   let uri = (c ^. (oidc . oidcIssuer)) <> wellknownUrl
-  print uri
+  putStr "fetch openid config from: " >> print uri
   req <- parseRequest (TL.unpack uri)
   resp <- httpLbs req
   return (handleWellKnownResponse resp)

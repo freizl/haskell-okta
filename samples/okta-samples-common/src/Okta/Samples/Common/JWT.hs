@@ -52,7 +52,6 @@ verifyJwtData :: Config
               -> SignedJWT
               -> ExceptT TL.Text IO SignedJWT
 verifyJwtData c nonceP jwks jwt = withExceptT (TL.pack . show) $ do
-  liftIO $ print jwt
   let keyIdsFromJwtHeader = jwt ^.. signatures ^.. traverse . header . kid . _Just . param
   when (null keyIdsFromJwtHeader) (throwError (review _JWTNoKeyFoundInHeader ()))
   let jwks' = [ k1 | k1 <- jwks, k2 <- keyIdsFromJwtHeader, (k1 ^. jwkKid) == Just k2]

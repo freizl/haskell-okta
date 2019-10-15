@@ -46,3 +46,30 @@ executables:
     - text
     - wai
     - okta-samples-common
+
+tests:
+  login-with-okta-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - login-with-okta
+    - okta-samples-common
+    - http-types
+    - bytestring
+    - text
+    - lens
+    - jose
+    - aeson
+    - process
+    - wai-extra
+    - tasty
+    - tasty-hspec
+    - tasty-ant-xml
+    - hspec
+    - hspec-wai
+    - wai
+    - lucid

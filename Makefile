@@ -5,3 +5,6 @@ watch:
 
 build:
 	cabal v2-build all
+
+test:
+	cabal v2-test all

@@ -40,11 +40,9 @@ fetchAuthUser :: Config
               -> ExceptT Text IO UserInfo
 fetchAuthUser c openidConfig codeP nonceP = do
   tokenResp <- fetchToken c openidConfig codeP
+  liftIO $ (putStr "ID Token:" >> print (tokenResp ^. idToken))
   _ <- decodeIdToken tokenResp >>= verifyJWTToken c openidConfig nonceP
-  -- TODO: maybe verify access Token
-  -- _ <- decodeAccessToken tokenResp >>= verifyJWTToken c openidConfig nonceP
   fetchUserInfo openidConfig (tokenResp ^. accessToken)
-
 
 fetchUserInfo :: OpenIDConfiguration -> AccessToken -> ExceptT Text IO UserInfo
 fetchUserInfo openidConfig atk = ExceptT $ do
@@ -114,7 +112,6 @@ decodeIdToken eitherResp =
   let t = (eitherResp ^. idToken)
   in
    ExceptT $ return $ first (TL.pack . show) (decodeCompact (TL.encodeUtf8 t) :: Either Error SignedJWT)
-
 
 fetchKeys :: OpenIDConfiguration -> ExceptT TL.Text IO [JWK]
 fetchKeys oc = ExceptT $ do

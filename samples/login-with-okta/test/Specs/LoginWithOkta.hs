@@ -2,7 +2,7 @@
 
 {-# LANGUAGE OverloadedStrings #-}
 
-module Specs.AppOktaHostedLogin (
+module Specs.LoginWithOkta (
   spec
   ) where
 
@@ -13,7 +13,7 @@ import qualified Network.Wai                as WAI
 import           Test.Hspec
 import           Test.Hspec.Wai
 
-import           AppOktaHostedLogin
+import           LoginWithOkta
 import           Okta.Samples.Common.Types
 
 import           Specs.Internal
