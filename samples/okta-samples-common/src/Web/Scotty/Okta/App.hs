@@ -2,14 +2,12 @@
 
 module Web.Scotty.Okta.App (runApp, waiApp) where
 
-import qualified Control.Applicative                  as CA
 import           Control.Lens                         ((^.))
 import           Control.Monad
 import           Control.Monad.Except
 import           Network.Wai.Handler.Warp             (run)
 import           Prelude                              hiding (exp)
 
-import           Data.List
 import qualified Network.Wai                          as WAI
 import           Network.Wai.Middleware.RequestLogger
 import           Network.Wai.Middleware.Static
@@ -35,10 +33,6 @@ waiApp :: AppOption -> ScottyM () -> IO WAI.Application
 waiApp opt extraScotty =
   scottyApp $ do
     when (opt ^. appServerDebug) (middleware logStdoutDev)
-    middleware $ staticPolicy (mapAssetsDir >-> addBase "public")
+    middleware $ staticPolicy (addBase "assets")
     defaultHandler globalErrorHandler
     extraScotty
-
-mapAssetsDir :: Policy
-mapAssetsDir = policy removeAssetsPrefix
-  where removeAssetsPrefix s = stripPrefix "assets/" s CA.<|> Just s

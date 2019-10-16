@@ -29,7 +29,7 @@ headH_ :: H.Html ()
 headH_ = head_ $
   meta_ [charset_ "UTF-8"]
   <> title_ "Sample App - Login with Okta"
-  <> link_ [href_ "/assets/css/samples.css", type_ "text/css", rel_ "stylesheet"]
+  <> link_ [href_ "/css/samples.css", type_ "text/css", rel_ "stylesheet"]
   <> base_ [href_ "/"]
 
 menuH_ :: Maybe CookieUser -> H.Html ()
@@ -194,7 +194,7 @@ loginH_ c =
           "var oktaWidgetConfig = " `BS.append` Aeson.encode (oidcToWidgetConfig c)
         )
         <>
-        script_ [src_ "/assets/js/main.js", type_ "text/javascript"] ("" :: Text)
+        script_ [src_ "/js/main.js", type_ "text/javascript"] ("" :: Text)
       )
     )
 
