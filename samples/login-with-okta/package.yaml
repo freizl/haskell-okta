@@ -29,6 +29,7 @@ library:
     - text
     - wai
     - okta-samples-common
+    - optparse-applicative
 
 executables:
   login-with-okta-exe:
@@ -40,12 +41,13 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
+    - okta-samples-common
     - lens
     - unordered-containers
     - scotty
     - text
     - wai
-    - okta-samples-common
+    - optparse-applicative
 
 tests:
   login-with-okta-test:

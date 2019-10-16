@@ -25,11 +25,17 @@ type Email = Text
 -- * App server option
 --------------------------------------------------
 
-newtype AppOption = AppOption { _appServerDebug :: Bool }
-                  deriving (Show, Eq)
-
-defaultAppOption :: AppOption
-defaultAppOption = AppOption False
+data AppOption = AppOption
+  { _appIssuer       :: Text
+  , _appClientId     :: Text
+  , _appClientSecret :: Text
+  , _appRedirectUri  :: Text
+  , _appScopes       :: [Text]
+  , _appCustomASId   :: Maybe Text -- Custom Authorization Server ID
+  , _appTokenAud     :: Maybe Text
+  , _appDebug        :: Bool
+  , _appPort         :: Int
+  } deriving (Show)
 
 makeLenses ''AppOption
 
@@ -96,7 +102,7 @@ data OIDC = OIDC { _oidcScope        :: Text
                  , _oidcClientId     :: Text
                  , _oidcClientSecret :: Text
                  , _oidcRedirectUri  :: Text
-                 , _oidcTokenAud :: Maybe StringOrURI  -- for verify Custom AS AccessToken
+                 , _oidcTokenAud     :: Maybe StringOrURI  -- for verify Custom AS AccessToken
                  } deriving (Show, Eq)
 
 makeLenses ''OktaSample

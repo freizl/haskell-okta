@@ -18,6 +18,7 @@ import qualified Data.ByteString.Lazy.Char8 as BS
 import           Data.Either
 import           Data.Maybe
 import           Data.Monoid                ((<>))
+import           Data.String                (fromString)
 import           Data.Text.Lazy             (Text)
 import qualified Data.Text.Lazy             as TL
 import qualified Data.Text.Lazy.Encoding    as TL
@@ -26,7 +27,6 @@ import           Network.HTTP.Simple
 import           Network.HTTP.Types.Header
 import           Network.HTTP.Types.Status
 import           Prelude                    hiding (exp)
-import Data.String (fromString)
 
 import           Okta.Samples.Common.JWT
 import           Okta.Samples.Common.OIDC

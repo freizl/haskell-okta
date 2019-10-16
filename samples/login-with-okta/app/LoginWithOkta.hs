@@ -1,17 +1,20 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards   #-}
 
 module LoginWithOkta (app, waiApp) where
 
 
+import           Control.Applicative
+import           Data.Maybe
 import           Data.Text.Lazy            (Text)
+import qualified Data.Text.Lazy            as TL
 import qualified Network.Wai               as WAI
 import           Prelude                   hiding (exp)
-import Control.Applicative
 import           Web.Scotty
+
 
 import           Okta.Samples.Common.OIDC
 import           Okta.Samples.Common.Types
-import           Okta.Samples.Common.Utils
 import qualified Web.Scotty.Okta.App       as Okta
 import           Web.Scotty.Okta.Handlers
 import           Web.Scotty.Okta.Sessions
@@ -23,10 +26,9 @@ import           Web.Scotty.Okta.Sessions
 
 app :: AppOption -> IO ()
 app opt = do
-  cf <- readConfigFile
-  case cf of
-    Left l  -> print l
-    Right c -> Okta.runApp c (waiApp opt c)
+  print opt
+  let c = fromAppOptionToConfig opt
+  Okta.runApp c (waiApp opt c)
 
 waiApp :: AppOption -> Config -> OpenIDConfiguration -> IO WAI.Application
 waiApp opt c oc = Okta.waiApp opt $ do
@@ -36,6 +38,13 @@ waiApp opt c oc = Okta.waiApp opt $ do
   get "/authorization-code/callback" $ callbackH c oc
   get "/profile" $ profileH c
   get "/logout" logoutH
+
+fromAppOptionToConfig :: AppOption -> Config
+fromAppOptionToConfig AppOption{..} =
+  let iss = maybe _appIssuer (TL.append (_appIssuer `TL.append` "/oauth2/")) _appCustomASId
+  in
+    Config (OIDC (TL.unwords _appScopes) iss _appClientId _appClientSecret _appRedirectUri Nothing) _appPort
+
 --------------------------------------------------
 -- * Handlers
 --------------------------------------------------

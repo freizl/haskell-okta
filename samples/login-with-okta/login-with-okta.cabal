@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9883f4bb287d95cf91980c278fe8560431ff4e9e9c8c8e84b5b37ae3400ef8a6
+-- hash: e7fd2d9c9339ff4e3e8ec57d04d8cb558289f3ec74580a020b8b9943dd43f1b4
 
 name:           login-with-okta
 version:        0.1.0.0
@@ -37,6 +37,7 @@ library
       base >=4.7 && <5
     , lens
     , okta-samples-common
+    , optparse-applicative
     , scotty
     , text
     , unordered-containers
@@ -55,6 +56,7 @@ executable login-with-okta-exe
       base >=4.7 && <5
     , lens
     , okta-samples-common
+    , optparse-applicative
     , scotty
     , text
     , unordered-containers

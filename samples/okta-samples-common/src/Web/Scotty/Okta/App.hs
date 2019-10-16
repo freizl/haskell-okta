@@ -32,7 +32,7 @@ runApp c app = do
 waiApp :: AppOption -> ScottyM () -> IO WAI.Application
 waiApp opt extraScotty =
   scottyApp $ do
-    when (opt ^. appServerDebug) (middleware logStdoutDev)
+    when (opt ^. appDebug) (middleware logStdoutDev)
     middleware $ staticPolicy (addBase "assets")
     defaultHandler globalErrorHandler
     extraScotty

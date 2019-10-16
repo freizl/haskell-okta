@@ -4,6 +4,7 @@ module Okta.Samples.Common.Templates where
 
 import           Control.Lens              ((^.))
 import qualified Data.Aeson                as Aeson
+import           Data.Aeson.Encode.Pretty  (encodePretty)
 import qualified Data.ByteString.Lazy      as BS
 import           Data.Semigroup            ((<>))
 import qualified Data.Text                 as T
@@ -12,7 +13,6 @@ import qualified Data.Text.Lazy            as TL
 import qualified Data.Text.Lazy.Encoding   as TL
 import qualified Lucid.Base                as H
 import           Lucid.Html5
-import Data.Aeson.Encode.Pretty (encodePretty)
 
 import           Okta.Samples.Common.Types
 
