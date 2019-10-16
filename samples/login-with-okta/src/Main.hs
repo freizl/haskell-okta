@@ -5,8 +5,8 @@ module Main where
 import           Data.Semigroup            ((<>))
 import           Options.Applicative
 
-import           LoginWithOkta             (app)
 import           Okta.Samples.Common.Types
+import           Okta.Samples.Scotty.App   (app)
 
 main :: IO ()
 main = runAppOptionParser >>= app
@@ -16,7 +16,7 @@ runAppOptionParser = execParser opts
   where
     opts = info (appOptionParser <**> helper)
       ( fullDesc
-        <> progDesc "Login with Okta Sample Application"
+        <> progDesc "Login with Okta Sample Application. By default it's run against Org AS until Custom AS Id has been provided via 'custom-as'."
         <> header "happy hacking with Okta" )
 
 appOptionParser :: Parser AppOption
@@ -46,7 +46,7 @@ appOptionParser = AppOption
             <|>
             pure ["openid", "profile", "email"]
           )
-      <*> optional (strOption (long "custom-as" <> help "(optonal) run sample app using custom authorization server."))
+      <*> optional (strOption (long "custom-as" <> help "(optonal) custom authorization server ID."))
       <*> optional (strOption
                       ( long "token-aud"
                         <> short 'a'

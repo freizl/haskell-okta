@@ -8,7 +8,6 @@ import qualified Data.Text.Lazy     as TL
 tlToBS :: TL.Text -> ByteString
 tlToBS = T.encodeUtf8 . TL.toStrict
 
-
 parseValue :: Aeson.FromJSON a => Maybe Aeson.Value -> Maybe a
 parseValue Nothing = Nothing
 parseValue (Just a) = case Aeson.fromJSON a of

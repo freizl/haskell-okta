@@ -17,9 +17,8 @@ dependencies:
   - base >= 4.7 && < 5
 
 library:
-  source-dirs: app
-  exposed-modules:
-      LoginWithOkta
+  source-dirs:
+    - src
   ghc-options:
     - -Wall
   dependencies:
@@ -27,27 +26,58 @@ library:
     - unordered-containers
     - scotty
     - text
-    - wai
-    - okta-samples-common
     - optparse-applicative
+    - aeson
+    - aeson-pretty
+    - jose
+    - monad-time
+    - network-uri
+    - bytestring
+    - http-conduit
+    - http-types
+    - cookie
+    - binary
+    - wai
+    - wai-extra
+    - wai-middleware-static
+    - warp
+    - time
+    - mtl
+    - lucid
 
 executables:
   login-with-okta-exe:
     main:                Main.hs
-    source-dirs:         app
+    source-dirs:
+    - src
     ghc-options:
     - -Wall
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - okta-samples-common
     - lens
     - unordered-containers
     - scotty
     - text
-    - wai
     - optparse-applicative
+    - aeson
+    - aeson-pretty
+    - jose
+    - monad-time
+    - network-uri
+    - bytestring
+    - http-conduit
+    - http-types
+    - cookie
+    - binary
+    - wai
+    - wai-extra
+    - wai-middleware-static
+    - warp
+    - time
+    - mtl
+    - lucid
 
 tests:
   login-with-okta-test:
@@ -59,7 +89,6 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - login-with-okta
-    - okta-samples-common
     - http-types
     - bytestring
     - text

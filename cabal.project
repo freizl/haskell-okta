@@ -1,3 +1,2 @@
 packages: buildtool/
-          samples/okta-samples-common/
           samples/login-with-okta/

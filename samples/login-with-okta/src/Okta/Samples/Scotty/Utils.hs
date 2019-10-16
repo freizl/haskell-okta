@@ -1,4 +1,4 @@
-module Web.Scotty.Okta.Utils where
+module Okta.Samples.Scotty.Utils where
 import           Data.Text.Lazy            (Text)
 import           Web.Scotty.Internal.Types
 

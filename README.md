@@ -6,6 +6,7 @@
 - [X] use `.well-known` endpoint to fetch authenticate url and issuer.
 - [x] merge `custom-login` and `okta-hosted-login`
 - [ ] fix unit test
+- [ ] logger
 - [ ] method for verify ID token and Access Token
 - [ ] clear cookie that set by SIW when start up
 - [ ] add stylish-haskell and hlint as dependencies

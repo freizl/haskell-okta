@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e7fd2d9c9339ff4e3e8ec57d04d8cb558289f3ec74580a020b8b9943dd43f1b4
+-- hash: 0abdaa28c3cc44ac7bf8c14c3710b1d0a24f48cf7cc9543c2080dc4880728c24
 
 name:           login-with-okta
 version:        0.1.0.0
@@ -26,41 +26,95 @@ source-repository head
 
 library
   exposed-modules:
-      LoginWithOkta
-  other-modules:
       Main
+      Data.Aeson.Okta.Ext
+      Okta.Samples.Common.JWT
+      Okta.Samples.Common.OIDC
+      Okta.Samples.Common.Templates
+      Okta.Samples.Common.Token
+      Okta.Samples.Common.Types
+      Okta.Samples.Common.Utils
+      Okta.Samples.Scotty.App
+      Okta.Samples.Scotty.Handlers
+      Okta.Samples.Scotty.Sessions
+      Okta.Samples.Scotty.Utils
+      Okta.Samples.Scotty.Views
+  other-modules:
       Paths_login_with_okta
   hs-source-dirs:
       app
+      src
   ghc-options: -Wall
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , aeson-pretty
+    , base >=4.7 && <5
+    , binary
+    , bytestring
+    , cookie
+    , http-conduit
+    , http-types
+    , jose
     , lens
-    , okta-samples-common
+    , lucid
+    , monad-time
+    , mtl
+    , network-uri
     , optparse-applicative
     , scotty
     , text
+    , time
     , unordered-containers
     , wai
+    , wai-extra
+    , wai-middleware-static
+    , warp
   default-language: Haskell2010
 
 executable login-with-okta-exe
   main-is: Main.hs
   other-modules:
-      LoginWithOkta
+      Data.Aeson.Okta.Ext
+      Okta.Samples.Common.JWT
+      Okta.Samples.Common.OIDC
+      Okta.Samples.Common.Templates
+      Okta.Samples.Common.Token
+      Okta.Samples.Common.Types
+      Okta.Samples.Common.Utils
+      Okta.Samples.Scotty.App
+      Okta.Samples.Scotty.Handlers
+      Okta.Samples.Scotty.Sessions
+      Okta.Samples.Scotty.Utils
+      Okta.Samples.Scotty.Views
       Paths_login_with_okta
   hs-source-dirs:
       app
+      src
   ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , aeson-pretty
+    , base >=4.7 && <5
+    , binary
+    , bytestring
+    , cookie
+    , http-conduit
+    , http-types
+    , jose
     , lens
-    , okta-samples-common
+    , lucid
+    , monad-time
+    , mtl
+    , network-uri
     , optparse-applicative
     , scotty
     , text
+    , time
     , unordered-containers
     , wai
+    , wai-extra
+    , wai-middleware-static
+    , warp
   default-language: Haskell2010
 
 test-suite login-with-okta-test
@@ -86,7 +140,6 @@ test-suite login-with-okta-test
     , lens
     , login-with-okta
     , lucid
-    , okta-samples-common
     , process
     , tasty
     , tasty-ant-xml

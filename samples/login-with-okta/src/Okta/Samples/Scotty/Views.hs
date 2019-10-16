@@ -1,4 +1,4 @@
-module Web.Scotty.Okta.Views where
+module Okta.Samples.Scotty.Views where
 
 import           Data.Text.Lazy                (Text)
 import qualified Lucid.Base                    as H

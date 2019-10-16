@@ -43,7 +43,7 @@ fetchAuthUser :: Config
               -> ExceptT Text IO (ClaimsSet, UserInfo)
 fetchAuthUser c openidConfig codeP nonceP = do
   tokenResp <- fetchToken c openidConfig codeP
-  liftIO $ (putStr "ID Token:" >> print (tokenResp ^. idToken))
+  liftIO (putStr "ID Token:" >> print (tokenResp ^. idToken))
   idTokenClaims <- decodeIdToken tokenResp >>= verifyJWTToken (setIDTokenAud c) openidConfig nonceP
   -- TODO: no nonce from access token.
   -- when (isCustomAS openidConfig) (void $ decodeAccessToken tokenResp >>= (verifyJWTToken (setAccessTokenAud c) openidConfig nonceP))
@@ -51,10 +51,10 @@ fetchAuthUser c openidConfig codeP nonceP = do
   return (idTokenClaims, userInfo)
 
 setIDTokenAud :: Config -> Config
-setIDTokenAud c = (set (oidc . oidcTokenAud) (Just . fromString . TL.unpack $ c ^. (oidc . oidcClientId)) c)
+setIDTokenAud c = set (oidc . oidcTokenAud) (Just . fromString . TL.unpack $ c ^. (oidc . oidcClientId)) c
 
 setAccessTokenAud :: Config -> Config
-setAccessTokenAud c = (set (oidc . oidcTokenAud) (Just defaultCustomASAud) c)
+setAccessTokenAud = set (oidc . oidcTokenAud) (Just defaultCustomASAud)
 
 fetchUserInfo :: OpenIDConfiguration -> AccessToken -> ExceptT Text IO UserInfo
 fetchUserInfo openidConfig atk = ExceptT $ do

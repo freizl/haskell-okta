@@ -8,3 +8,6 @@ build:
 
 test:
 	cabal v2-test all
+
+lint:
+	cabal v2-exec buildtool -- stylish && cabal v2-exec buildtool -- lint

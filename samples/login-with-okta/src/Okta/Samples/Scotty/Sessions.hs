@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Web.Scotty.Okta.Sessions where
+module Okta.Samples.Scotty.Sessions where
 
 import           Control.Applicative       ((<$>))
 import           Data.Aeson                (decode)
@@ -16,6 +16,11 @@ import           Web.Scotty
 import           Okta.Samples.Common.Types
 
 
+type CookieKey = BS.ByteString
+
+sampleAppCookieUserKey :: CookieKey
+sampleAppCookieUserKey = "login-with-okta-sample-cookie-user"
+
 renderSetCookie' :: SetCookie -> Text
 renderSetCookie' = T.decodeUtf8 . B.toLazyByteString . renderSetCookie
 
@@ -23,7 +28,7 @@ renderSetCookie' = T.decodeUtf8 . B.toLazyByteString . renderSetCookie
 -- * cookie ActionM
 --------------------------------------------------
 
-setCookieM :: BS.ByteString  -- ^ cookie name
+setCookieM :: CookieKey  -- ^ cookie name
            -> BS.ByteString  -- ^ cookie path
            -> BS.ByteString  -- ^ cookie value
            -> ActionM ()
@@ -32,7 +37,7 @@ setCookieM n p v = addHeader "Set-Cookie" (renderSetCookie' (def { setCookieName
                                                                  , setCookiePath = Just p
                                                                  }))
 
-deleteCookieM :: BS.ByteString  -- cookie name
+deleteCookieM :: CookieKey  -- cookie name
               -> BS.ByteString  -- path
               -> ActionM ()
 deleteCookieM n path = addHeader
@@ -51,7 +56,7 @@ getCookiesM' :: ActionM (Maybe CookiesText)
 getCookiesM' =
     fmap (parseCookiesText . lazyToStrict . T.encodeUtf8) <$> header "Cookie"
     where
-        lazyToStrict = BS.concat . BSL.toChunks
+      lazyToStrict = BS.concat . BSL.toChunks
 
 getCookieV :: Text -> Maybe CookiesText -> Maybe Text
 getCookieV _ Nothing = Nothing
@@ -60,8 +65,8 @@ getCookieV key (Just ((a, b): xs))
   | a == T.toStrict key = Just (T.fromStrict b)
   | otherwise = getCookieV key (Just xs)
 
-getCookiesM :: Text -> ActionM (Maybe Text)
-getCookiesM key = fmap (getCookieV key) getCookiesM'
+getCookiesM :: CookieKey -> ActionM (Maybe Text)
+getCookiesM key = fmap (getCookieV . T.decodeUtf8 . BSL.fromStrict $ key) getCookiesM'
 
 --------------------------------------------------
 -- * User cookie ActionM
@@ -75,10 +80,10 @@ withCookieUserM yes no = do
     Just u  -> yes u
 
 getCookieUserM :: ActionM (Maybe CookieUser)
-getCookieUserM = maybe Nothing (decode . T.encodeUtf8) <$> getCookiesM "user"
+getCookieUserM = maybe Nothing (decode . T.encodeUtf8) <$> getCookiesM sampleAppCookieUserKey
 
 setCookieUserM :: BS.ByteString -> ActionM ()
-setCookieUserM = setCookieM "user" "/"
+setCookieUserM = setCookieM sampleAppCookieUserKey "/"
 
 deleteCookieUserM :: ActionM ()
-deleteCookieUserM = deleteCookieM "user" "/"
+deleteCookieUserM = deleteCookieM sampleAppCookieUserKey "/"
