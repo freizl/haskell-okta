@@ -50,7 +50,7 @@ verifyJwtData :: Config
               -> Nonce
               -> [JWK]
               -> SignedJWT
-              -> ExceptT TL.Text IO SignedJWT
+              -> ExceptT TL.Text IO ClaimsSet
 verifyJwtData c nonceP jwks jwt = withExceptT (TL.pack . show) $ do
   -- liftIO $ print c
   -- liftIO $ print jwt
@@ -62,7 +62,7 @@ verifyJwtData c nonceP jwks jwt = withExceptT (TL.pack . show) $ do
   claim <- verifyClaims conf (JWKSet jwks) jwt :: ExceptT OktaJWTError IO ClaimsSet
   oktaValidateAlg firstJWK jwt
   oktaValidateNonceClaim nonceP claim
-  return jwt
+  return claim
 
 jwtValidationSettings :: Config -> JWTValidationSettings
 jwtValidationSettings c = defaultJWTValidationSettings (audPredicate c)

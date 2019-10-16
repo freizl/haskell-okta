@@ -28,7 +28,8 @@ TODO: yaml or dhall; passed as parameter
 - [X] use `.well-known` endpoint to fetch authenticate url and issuer.
 - [x] merge `custom-login` and `okta-hosted-login`
 - [ ] fix unit test
+- [ ] method for verify ID token and Access Token
 - [ ] clear cookie that set by SIW when start up
 - [ ] add stylish-haskell and hlint as dependencies
 - [ ] sample app shall be able to paramaters for run against different issuer
-- [ ] show ID token in web page
+- [X] show ID token in web page

@@ -27,6 +27,7 @@ library:
     - -Wall
   dependencies:
   - aeson
+  - aeson-pretty
   - jose
   - lens
   - unordered-containers

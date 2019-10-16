@@ -40,17 +40,19 @@ fetchAuthUser :: Config
               -> OpenIDConfiguration
               -> Code
               -> Nonce
-              -> ExceptT Text IO UserInfo
+              -> ExceptT Text IO (ClaimsSet, UserInfo)
 fetchAuthUser c openidConfig codeP nonceP = do
   tokenResp <- fetchToken c openidConfig codeP
   liftIO $ (putStr "ID Token:" >> print (tokenResp ^. idToken))
-  _ <- decodeIdToken tokenResp >>= verifyJWTToken (setIDTokenAud c) openidConfig nonceP
-  -- TODO: no nonec from access token??
+  idTokenClaims <- decodeIdToken tokenResp >>= verifyJWTToken (setIDTokenAud c) openidConfig nonceP
+  -- TODO: no nonce from access token.
   -- when (isCustomAS openidConfig) (void $ decodeAccessToken tokenResp >>= (verifyJWTToken (setAccessTokenAud c) openidConfig nonceP))
-  fetchUserInfo openidConfig (tokenResp ^. accessToken)
+  userInfo <- fetchUserInfo openidConfig (tokenResp ^. accessToken)
+  return (idTokenClaims, userInfo)
 
 setIDTokenAud :: Config -> Config
 setIDTokenAud c = (set (oidc . oidcTokenAud) (Just . fromString . TL.unpack $ c ^. (oidc . oidcClientId)) c)
+
 setAccessTokenAud :: Config -> Config
 setAccessTokenAud c = (set (oidc . oidcTokenAud) (Just defaultCustomASAud) c)
 
@@ -77,7 +79,7 @@ verifyJWTToken :: Config
               -> OpenIDConfiguration
               -> Nonce
               -> SignedJWT
-              -> ExceptT Text IO SignedJWT
+              -> ExceptT Text IO ClaimsSet
 verifyJWTToken c oc nonceP jwtData = do
   jwks <- fetchKeys oc
   verifyJwtData c nonceP jwks jwtData

@@ -12,6 +12,7 @@ import qualified Data.Text.Lazy            as TL
 import qualified Data.Text.Lazy.Encoding   as TL
 import qualified Lucid.Base                as H
 import           Lucid.Html5
+import Data.Aeson.Encode.Pretty (encodePretty)
 
 import           Okta.Samples.Common.Types
 
@@ -79,7 +80,7 @@ homeMessageH_ Nothing =
     )
   )
 
-homeMessageH_ (Just user) =
+homeMessageH_ (Just (_, user)) =
   let userName = (user ^. userInfoName)
   in
     p_ (H.toHtml $ "Welcome back, " `TL.append` userName)
@@ -96,17 +97,19 @@ homeMessageH_ (Just user) =
     )
 
 profileH_ :: CookieUser -> H.Html ()
-profileH_ user = baseH_ (Just user) $
+profileH_ cu@(claims, user) = baseH_ (Just cu) $
   h2_ [class_ "ui dividing header", datase_ "profile-doc-header"] "My Profile"
   <>
+  h3_ "User Info"
+  <>
   p_
-  (
-    span_ (H.toHtml $ "Hello, " `TL.append` (user ^. userInfoName) `TL.append` ". Below is the information that was read from the ")
-    <>
-    a_ [href_ "https://developer.okta.com/docs/api/resources/oidc#get-user-information"] "User Info Endpoint"
-    <>
-    span_ " with your Access Token."
-  )
+    (
+      span_ (H.toHtml $ "Hello, " `TL.append` (user ^. userInfoName) `TL.append` ". Below is the information that was read from the ")
+      <>
+      a_ [href_ "https://developer.okta.com/docs/api/resources/oidc#get-user-information"] "User Info Endpoint"
+      <>
+      span_ " with your Access Token."
+    )
   <>
   table_ [class_ "ui table compact collapsing"]
   (
@@ -133,6 +136,10 @@ profileH_ user = baseH_ (Just user) $
       tr_ (td_ "infoSub" <> td_ [id_ "claim-infoSub"] (H.toHtml $ user ^. userInfoSub))
     )
   )
+  <>
+  h3_ "ID Token Claims"
+  <>
+  pre_ [] (H.toHtml $ encodePretty claims)
 
 homeH_ :: Maybe CookieUser
          -> H.Html ()

@@ -105,5 +105,5 @@ handleAuthCallback :: Config -> OpenIDConfiguration -> [Text] -> [Text] -> Actio
 handleAuthCallback c openidConfig codeP nonceC = do
   r' <- liftIO $ runExceptT $ fetchAuthUser c openidConfig (head codeP) (head nonceC)
   case r' of
-    Right userInfo -> setCookieUserM (BS.toStrict $ encode userInfo) >> redirectToProfileM
+    Right userAndClaims -> setCookieUserM (BS.toStrict $ encode userAndClaims) >> redirectToProfileM
     Left e -> errorM e

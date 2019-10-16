@@ -4,13 +4,13 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9c397d40cac4c9b25d4b35300b0615b93be7658e8b7551bae89f0eda4fd92b9a
+-- hash: 6e354e32c034942ae9b3188d70d88d85ad47a3b5d4508de4c93285eb264f0e22
 
 name:           okta-samples-common
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/freizl/samples-common#readme>
-homepage:       https://github.com/freizl/samples-common#readme
-bug-reports:    https://github.com/freizl/samples-common/issues
+description:    Please see the README on GitHub at <https://github.com/haskell-okta#readme>
+homepage:       https://github.com/haskell-okta#readme
+bug-reports:    https://github.com/haskell-okta/issues
 author:         Haisheng Wu
 maintainer:     freizl@gmail.com
 copyright:      2016 Haisheng Wu
@@ -22,14 +22,14 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/freizl/samples-common
+  location: https://github.com/haskell-okta
 
 library
   exposed-modules:
       Data.Aeson.Okta.Ext
       Okta.Samples.Common.JWT
-      Okta.Samples.Common.Templates
       Okta.Samples.Common.OIDC
+      Okta.Samples.Common.Templates
       Okta.Samples.Common.Token
       Okta.Samples.Common.Types
       Okta.Samples.Common.Utils
@@ -45,6 +45,7 @@ library
   ghc-options: -Wall
   build-depends:
       aeson
+    , aeson-pretty
     , base >=4.7 && <5
     , binary
     , bytestring
