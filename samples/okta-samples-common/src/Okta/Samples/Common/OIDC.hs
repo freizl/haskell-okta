@@ -32,7 +32,6 @@ data OpenIDConfiguration = OpenIDConfiguration
 makeLenses ''OpenIDConfiguration
 $(deriveJSON defaultOptions{fieldLabelModifier = camelTo2 '_' . drop 1} ''OpenIDConfiguration)
 
-
 wellknownUrl :: Text
 wellknownUrl = "/.well-known/openid-configuration"
 
@@ -51,3 +50,7 @@ handleWellKnownResponse resp = do
     if rStatus == status200 then
         first (("handleWellKnownResponse decode response failed: " <>) . TL.pack) (eitherDecode rawBody)
     else Left $ "handleWellKnownResponse failed: " <> TL.pack (show rStatus) <> TL.decodeUtf8 rawBody
+
+-- Poor man's solution to check whether issuer is Custom AS or Org AS
+isCustomAS :: OpenIDConfiguration -> Bool
+isCustomAS c = TL.isInfixOf "/oauth2/" (c ^. issuer)

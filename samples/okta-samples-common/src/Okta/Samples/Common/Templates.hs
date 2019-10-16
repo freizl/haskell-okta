@@ -105,7 +105,7 @@ profileH_ user = baseH_ (Just user) $
     <>
     a_ [href_ "https://developer.okta.com/docs/api/resources/oidc#get-user-information"] "User Info Endpoint"
     <>
-    span_ " with your ID Token."
+    span_ " with your Access Token."
   )
   <>
   table_ [class_ "ui table compact collapsing"]

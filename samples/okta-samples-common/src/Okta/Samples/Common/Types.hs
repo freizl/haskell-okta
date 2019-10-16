@@ -4,6 +4,7 @@
 module Okta.Samples.Common.Types where
 
 import           Crypto.JOSE.JWK
+import           Crypto.JWT
 
 import           Control.Lens        hiding (iat, (.=))
 import           Data.Aeson          (FromJSON, parseJSON)
@@ -95,6 +96,7 @@ data OIDC = OIDC { _oidcScope        :: Text
                  , _oidcClientId     :: Text
                  , _oidcClientSecret :: Text
                  , _oidcRedirectUri  :: Text
+                 , _oidcTokenAud :: Maybe StringOrURI  -- for verify Custom AS AccessToken
                  } deriving (Show, Eq)
 
 makeLenses ''OktaSample

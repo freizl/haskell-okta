@@ -59,7 +59,7 @@ command_ TestE2E        = teste2e
 
 lint :: IO ()
 lint = pl
-  , sh "stack exec hlint samples/login-with-okta/app"
+  [ sh "stack exec hlint samples/login-with-okta/app"
   , sh "stack exec hlint samples/login-with-okta/test"
   , sh "stack exec hlint samples/okta-samples-common/src"
   , sh "stack exec hlint buildtool/app"
@@ -67,7 +67,7 @@ lint = pl
 
 stylish :: IO ()
 stylish = pl
-  , sh "stack exec stylish-haskell -- -i samples/login-with-okta/app/*.hs"
+  [ sh "stack exec stylish-haskell -- -i samples/login-with-okta/app/*.hs"
   , sh "stack exec stylish-haskell -- -i samples/okta-samples-common/src/Okta/Samples/Common/*.hs"
   , sh "stack exec stylish-haskell -- -i samples/okta-samples-common/src/Data/Aeson/Okta/*.hs"
   , sh "stack exec stylish-haskell -- -i samples/okta-samples-common/src/Web/Scotty/Okta/*.hs"

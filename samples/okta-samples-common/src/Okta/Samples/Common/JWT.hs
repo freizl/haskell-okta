@@ -52,6 +52,8 @@ verifyJwtData :: Config
               -> SignedJWT
               -> ExceptT TL.Text IO SignedJWT
 verifyJwtData c nonceP jwks jwt = withExceptT (TL.pack . show) $ do
+  -- liftIO $ print c
+  -- liftIO $ print jwt
   let keyIdsFromJwtHeader = jwt ^.. signatures ^.. traverse . header . kid . _Just . param
   when (null keyIdsFromJwtHeader) (throwError (review _JWTNoKeyFoundInHeader ()))
   let jwks' = [ k1 | k1 <- jwks, k2 <- keyIdsFromJwtHeader, (k1 ^. jwkKid) == Just k2]
@@ -63,11 +65,11 @@ verifyJwtData c nonceP jwks jwt = withExceptT (TL.pack . show) $ do
   return jwt
 
 jwtValidationSettings :: Config -> JWTValidationSettings
-jwtValidationSettings c = defaultJWTValidationSettings audPredicate
+jwtValidationSettings c = defaultJWTValidationSettings (audPredicate c)
   & jwtValidationSettingsAllowedSkew .~ maxClockSkew
   & jwtValidationSettingsCheckIssuedAt .~ True
   & jwtValidationSettingsIssuerPredicate .~ issPredicate c
-  where audPredicate su = (su ^? string) == (Just . TL.toStrict) (c ^. (oidc . oidcClientId))
+  where audPredicate config' su = Just su == (config' ^. (oidc . oidcTokenAud))
         issPredicate config' iss' = let uri' = TL.unpack (config' ^. (oidc . oidcIssuer))
                                     in
                                       isURI uri' && (iss' ^? uri  == parseURI uri')

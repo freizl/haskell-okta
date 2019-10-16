@@ -26,12 +26,15 @@ import           Network.HTTP.Simple
 import           Network.HTTP.Types.Header
 import           Network.HTTP.Types.Status
 import           Prelude                    hiding (exp)
+import Data.String (fromString)
 
 import           Okta.Samples.Common.JWT
 import           Okta.Samples.Common.OIDC
 import           Okta.Samples.Common.Types
 import           Okta.Samples.Common.Utils
 
+defaultCustomASAud :: StringOrURI
+defaultCustomASAud = "api://default"
 
 fetchAuthUser :: Config
               -> OpenIDConfiguration
@@ -41,8 +44,15 @@ fetchAuthUser :: Config
 fetchAuthUser c openidConfig codeP nonceP = do
   tokenResp <- fetchToken c openidConfig codeP
   liftIO $ (putStr "ID Token:" >> print (tokenResp ^. idToken))
-  _ <- decodeIdToken tokenResp >>= verifyJWTToken c openidConfig nonceP
+  _ <- decodeIdToken tokenResp >>= verifyJWTToken (setIDTokenAud c) openidConfig nonceP
+  -- TODO: no nonec from access token??
+  -- when (isCustomAS openidConfig) (void $ decodeAccessToken tokenResp >>= (verifyJWTToken (setAccessTokenAud c) openidConfig nonceP))
   fetchUserInfo openidConfig (tokenResp ^. accessToken)
+
+setIDTokenAud :: Config -> Config
+setIDTokenAud c = (set (oidc . oidcTokenAud) (Just . fromString . TL.unpack $ c ^. (oidc . oidcClientId)) c)
+setAccessTokenAud :: Config -> Config
+setAccessTokenAud c = (set (oidc . oidcTokenAud) (Just defaultCustomASAud) c)
 
 fetchUserInfo :: OpenIDConfiguration -> AccessToken -> ExceptT Text IO UserInfo
 fetchUserInfo openidConfig atk = ExceptT $ do
@@ -112,6 +122,12 @@ decodeIdToken eitherResp =
   let t = (eitherResp ^. idToken)
   in
    ExceptT $ return $ first (TL.pack . show) (decodeCompact (TL.encodeUtf8 t) :: Either Error SignedJWT)
+
+decodeAccessToken :: TokenResponse -> ExceptT Text IO SignedJWT
+decodeAccessToken eitherResp =
+  let t = (eitherResp ^. accessToken)
+  in
+  ExceptT $ return $ first (TL.pack . show) (decodeCompact (TL.encodeUtf8 t) :: Either Error SignedJWT)
 
 fetchKeys :: OpenIDConfiguration -> ExceptT TL.Text IO [JWK]
 fetchKeys oc = ExceptT $ do

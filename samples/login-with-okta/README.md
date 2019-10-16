@@ -8,7 +8,11 @@ This example shows you how to use Haskell to login to your application with a Cu
 
 ## why not/cannot verify access Token
 
-- Custom AS's AccessToken aud is what admin customized, default to `api:default`
+1. For Org AS
+
 - Org AS's AccessToken aud is default to issuer
 - `/keys` endpoint didn't publish key for verify AccessToken yet
 - The whole point is Okta is the ONLY valid audience for AccessToken and it is Okta's job to verify AccessToken but not any other clients.
+
+2. Custom AS's AccessToken `aud` is what admin customized, default to `api:default` which can be customized at Admin UI (Security -> API).
+   AcessToken is intend to be used by your resource server hence shall be able to verify the AccessToken
