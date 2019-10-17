@@ -37,14 +37,14 @@ homeS = with (testApp sampleConfig) $
 
 loginRedirectS :: Spec
 loginRedirectS = with (testApp sampleConfig) $
-  describe "GET /login" $ do
+  describe "GET /login-redirect" $ do
     it "responds with 302" $
-      get "/login" `shouldRespondWith` 302
+      get "/login-redirect" `shouldRespondWith` 302
     it "responds scenarios page when no user session" $
-      get "/login"
+      get "/login-redirect"
       `shouldRespondWith`
       302 {matchHeaders = ["Location" <:> BS.pack (
-        "https://rain.okta1.com/oauth2/default/v1/authorize" ++
+        "https://rain.okta1.com/oauth2/v1/authorize" ++
         "?" ++
         "client_id=cid-111&" ++
         "response_type=code&" ++
@@ -55,7 +55,7 @@ loginRedirectS = with (testApp sampleConfig) $
         "nonce=okta-hosted-login-nonce-123"
       )]}
     it "redirect to user profile when user session presents" $
-      getWithUserCookie "/login"
+      getWithUserCookie "/login-redirect"
       `shouldRespondWith`
       302 {matchHeaders = ["Location" <:> "/profile"]}
 
@@ -80,7 +80,10 @@ logoutS = with (testApp sampleConfig) $
       get "/logout"
       `shouldRespondWith`
       302 { matchHeaders = [ "Location" <:> "/"
-                           , "Set-Cookie" <:> "user=; Path=/; Max-Age=-1000000000"
+                           , "Set-Cookie" <:> "login-with-okta-sample-cookie-user=; Path=/; Max-Age=-1000000000"
+                           , "Set-Cookie" <:> "okta-oauth-state=; Path=/; Max-Age=-1000000000"
+                           , "Set-Cookie" <:> "okta-oauth-redirect-params=; Path=/; Max-Age=-1000000000"
+                           , "Set-Cookie" <:> "okta-oauth-nonce=; Path=/; Max-Age=-1000000000"
                            ]
           }
 
@@ -121,4 +124,4 @@ actualExpected message actual expected =
                       ]
 
 testApp :: Config -> IO WAI.Application
-testApp = waiApp defaultAppOption
+testApp c = waiApp defaultAppOption c sampleOpenIDConfig

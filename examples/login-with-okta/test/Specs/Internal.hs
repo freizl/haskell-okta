@@ -19,7 +19,9 @@ import           Prelude                       hiding (exp)
 import           Test.Hspec.Wai
 
 import           Okta.Samples.Common.Templates
+import           Okta.Samples.Common.OIDC
 import           Okta.Samples.Common.Types
+import           Okta.Samples.Scotty.Sessions
 
 
 overviewPage :: IO String
@@ -31,7 +33,6 @@ loginCustomPage = return . TL.unpack . H.renderText $ loginH_ sampleConfig
 profilePage :: IO String
 profilePage = return . TL.unpack . H.renderText $ profileH_ sampleCookieUser
 
-
 getWithUserCookie :: ByteString -> WaiSession st SResponse
 getWithUserCookie path = getWithCookie path userCookie
 
@@ -39,7 +40,7 @@ getWithCookie :: ByteString -> ByteString -> WaiSession st SResponse
 getWithCookie path cookies = request methodGet path [(hCookie, cookies)] ""
 
 userCookie :: ByteString
-userCookie = "user=" `BS.append` BSL.toStrict (encode sampleCookieUser)
+userCookie = sampleAppCookieUserKey `BS.append` "=" `BS.append` BSL.toStrict (encode sampleCookieUser)
 
 sampleCookieUser :: (ClaimsSet, UserInfo)
 sampleCookieUser =
@@ -63,6 +64,7 @@ sampleConfig = Config o 9191
                  , _oidcClientId = "cid-111"
                  , _oidcClientSecret = "cs-222"
                  , _oidcRedirectUri = "http://localhost:9191/authorization-code/callback"
+                 , _oidcTokenAud = Nothing
                  }
 
 defaultAppOption :: AppOption
@@ -75,5 +77,13 @@ defaultAppOption = AppOption
   , _appCustomAsId = Nothing
   , _appDebug = False
   , _appPort = 9191
+  }
 
+sampleOpenIDConfig :: OpenIDConfiguration
+sampleOpenIDConfig = OpenIDConfiguration
+  { _issuer                = "https://rain.okta1.com"
+  , _authorizationEndpoint = "https://rain.okta1.com/oauth2/v1/authorize"
+  , _tokenEndpoint         = "https://rain.okta1.com/oauth2/v1/token"
+  , _userinfoEndpoint      = "https://rain.okta1.com/oauth2/v1/userinfo"
+  , _jwksUri               = "https://rain.okta1.com/oauth2/v1/keys"
   }
