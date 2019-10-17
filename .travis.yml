@@ -19,7 +19,7 @@ env:
     - TEST_SUITE=build
 
 script:
-  - make $TEST_SUIT
+  - make $TEST_SUITE
 
 install:
   - cabal v2-install
