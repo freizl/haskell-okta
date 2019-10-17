@@ -2,6 +2,9 @@
 
 # TODO
 
+- [ ] make more UI interactive
+  - allow input AS ID
+  - table to show up how AT and IT has been verified and its result.
 - [X] unit test is broken
 - [X] use `.well-known` endpoint to fetch authenticate url and issuer.
 - [x] merge `custom-login` and `okta-hosted-login`

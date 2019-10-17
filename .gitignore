@@ -8,6 +8,7 @@ dist-newstyle
 cabal.project.local*
 examples/Makefile
 report.html
+result
 
 # Emacs
 TAGS

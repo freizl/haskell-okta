@@ -1,29 +1,46 @@
-language: haskell
+language: nix
 
-notifications:
-  slack: freizl:D42Dy68Q4Cj8Bjw5Qi9mZrQf
+before_install:
+  nix-env --install --attr nixpkgs.haskellPackages.hlint
 
-cache:
-  directories:
-    - $HOME/.cabal
-    - ./dist-newstyle
-
-cabal: "2.4"
-
-ghc:
-  - "8.6.5"
+script:
+  - make ci-$TEST_SUITE
 
 env:
   matrix:
     - TEST_SUITE=hlint
     - TEST_SUITE=build
 
-script:
-  - make $TEST_SUITE
+cache:
+  directories:
+    - /nix/store
 
-install:
-  - cabal v2-install
-  - cabal v2-install hlint
+notifications:
+  slack: freizl:D42Dy68Q4Cj8Bjw5Qi9mZrQf
 
-before_install:
-  - export PATH=$HOME/.cabal/bin:${PATH}
+# language: haskell
+#
+# cache:
+#   directories:
+#     - $HOME/.cabal
+#     - ./dist-newstyle
+
+# cabal: "2.4"
+
+# ghc:
+#   - "8.6.5"
+
+# env:
+#   matrix:
+#     - TEST_SUITE=hlint
+#     - TEST_SUITE=build
+
+# script:
+#   - make $TEST_SUITE
+
+# install:
+#   - cabal v2-install
+#   - cabal v2-install hlint
+
+# before_install:
+#   - export PATH=$HOME/.cabal/bin:${PATH}

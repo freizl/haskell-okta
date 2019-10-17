@@ -23,6 +23,7 @@ mkDerivation {
     aeson base bytestring hspec hspec-wai http-types jose lens lucid
     process tasty tasty-ant-xml tasty-hspec text wai wai-extra
   ];
+  doCheck = false;
   prePatch = "hpack";
   homepage = "https://github.com/freizl/haskell-okta#readme";
   license = stdenv.lib.licenses.asl20;

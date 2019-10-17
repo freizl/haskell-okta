@@ -23,15 +23,18 @@ hlint:
 hpack:
 	hpack -f examples/login-with-okta
 
+## TODO: disable test in nix-build due to version conflict of wai-extra
 cabal2nix:
-	cd examples/login-with-okta && cabal2nix . > ./login-with-okta.nix
+	cd examples/login-with-okta && cabal2nix --no-check . > ./login-with-okta.nix
 
 ####################
 ### CI
 ####################
 
+## there is build error when using lens-4.17.1 at JWT.hs (line 36 `makeClassyPrisms ''OktaJWTError`)
+## hence override the deps (lens, jose)
 ci-build: clean
-	nix-build
+	nix-build --attr login-with-okta
 
-ci-lint:
+ci-hlint:
 	nix-shell --command 'make hlint'
