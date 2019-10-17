@@ -71,11 +71,7 @@ getCookiesM key = fmap (getCookieV . T.decodeUtf8 . BSL.fromStrict $ key) getCoo
 --------------------------------------------------
 
 withCookieUserM :: (CookieUser -> ActionM ()) -> ActionM () -> ActionM ()
-withCookieUserM yes no = do
-  cu <- getCookieUserM
-  case cu of
-    Nothing -> no
-    Just u  -> yes u
+withCookieUserM yes no = getCookieUserM >>= maybe no yes
 
 getCookieUserM :: ActionM (Maybe CookieUser)
 getCookieUserM = maybe Nothing (decode . T.encodeUtf8) <$> getCookiesM sampleAppCookieUserKey

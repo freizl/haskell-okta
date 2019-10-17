@@ -1,4 +1,4 @@
-[![Build Status](https://secure.travis-ci.org/freizl/haskell-okta.svg?branch=master)](https://travis-ci.com/freizl/haskell-okta)
+[![Build Status](https://travis-ci.com/freizl/haskell-okta.svg?branch=master)](https://travis-ci.com/freizl/haskell-okta)
 
 # TODO
 
