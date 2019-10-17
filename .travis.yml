@@ -1,23 +1,26 @@
 language: haskell
 
 notifications:
-  - slack: freizl:D42Dy68Q4Cj8Bjw5Qi9mZrQf
+  slack: freizl:D42Dy68Q4Cj8Bjw5Qi9mZrQf
 
 cache:
   directories:
-  - $HOME/.cabal
-  - ./dist-newstyle
+    - $HOME/.cabal
+    - ./dist-newstyle
 
 cabal: "2.4"
 
 ghc:
   - "8.6.5"
 
+env:
+  matrix:
+    - TEST_SUITE=lint
+    - TEST_SUITE=build
+
 script:
-  - cabal v2-build all
- ## TODO - cabal exec buildtool -- hlint
- ## TODO - cabal exec buildtool -- unittest
+  - make $TEST_SUIT
 
 install:
   - cabal v2-install
-  ## TODO --enable-tests
+  - cabal v2-install hlint

@@ -8,7 +8,8 @@
 - [ ] fix unit test
 - [ ] logger
 - [ ] method for verify ID token and Access Token
-- [ ] clear cookie that set by SIW when start up
+  - how can have a global Reader/State to pull options/configs?
+- [X] clear cookie that set by SIW
 - [ ] add stylish-haskell and hlint as dependencies
-- [ ] sample app shall be able to paramaters for run against different issuer
+- [X] sample app shall be able to paramaters for run against different issuer
 - [X] show ID token in web page

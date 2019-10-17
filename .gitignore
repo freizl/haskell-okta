@@ -6,7 +6,8 @@
 dist-newstyle
 .ghc.environment.*
 cabal.project.local*
-samples/Makefile
+examples/Makefile
+report.html
 
 # Emacs
 TAGS

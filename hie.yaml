@@ -1,4 +1,4 @@
 cradle:
   cabal:
     # component: "all" is not supported yet.
-    component: "okta-samples-common"
+    component: "login-with-okta"
