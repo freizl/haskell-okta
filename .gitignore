@@ -1,4 +1,5 @@
 .DS_Store
+package.json
 
 # Haskell
 .stack-work
@@ -6,7 +7,6 @@
 dist-newstyle
 .ghc.environment.*
 cabal.project.local*
-examples/Makefile
 report.html
 result
 

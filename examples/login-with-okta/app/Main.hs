@@ -42,7 +42,7 @@ appOptionParser = AppOption
           )
       <*> (some (strOption ( long "scopes"
                           <> short 's'
-                          <> help "scopes. default to '-s openid -s profile -s email'."))
+                          <> help "scopes. (default: '-s openid -s profile -s email')"))
             <|>
             pure ["openid", "profile", "email"]
           )
