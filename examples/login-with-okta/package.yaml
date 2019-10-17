@@ -49,41 +49,23 @@ executables:
   login-with-okta-exe:
     main:                Main.hs
     source-dirs:
-    - src
+    - app
     ghc-options:
     - -Wall
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - lens
-    - unordered-containers
-    - scotty
-    - text
+    - login-with-okta
     - optparse-applicative
-    - aeson
-    - aeson-pretty
-    - jose
-    - monad-time
-    - network-uri
-    - bytestring
-    - http-conduit
-    - http-types
-    - cookie
-    - binary
-    - wai
-    - wai-extra
-    - wai-middleware-static
-    - warp
-    - time
-    - mtl
-    - lucid
+
 
 tests:
   login-with-okta-test:
     main:                Spec.hs
     source-dirs:         test
     ghc-options:
+    - -Wall
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N

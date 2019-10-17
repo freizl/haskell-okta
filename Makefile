@@ -1,7 +1,9 @@
 ## entr: http://eradman.com/entrproject/
 ##
+SRC=examples
+
 watch:
-	find samples buildtool -name '*.hs' | entr -s 'make build'
+	find $(SRC) -name '*.hs' | entr -s 'make build'
 
 clean:
 	cabal v2-clean
@@ -13,11 +15,23 @@ test:
 	cabal v2-test all
 
 stylelish:
-	find samples buildtool -name '*.hs' | xargs stylish-haskell -i
+	find $(SRC) -name '*.hs' | xargs stylish-haskell -i
 
 hlint:
 	hlint . --report
 
 hpack:
-	hpack -f samples/login-with-okta
-	hpack -f buildtool
+	hpack -f examples/login-with-okta
+
+cabal2nix:
+	cd examples/login-with-okta && cabal2nix . > ./login-with-okta.nix
+
+####################
+### CI
+####################
+
+ci-build: clean
+	nix-build
+
+ci-lint:
+	nix-shell --command 'make hlint'

@@ -24,3 +24,6 @@ script:
 install:
   - cabal v2-install
   - cabal v2-install hlint
+
+before_install:
+  - export PATH=$HOME/.cabal/bin:${PATH}

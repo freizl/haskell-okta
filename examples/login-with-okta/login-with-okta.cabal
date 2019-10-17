@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6786fa87e8704e44ee82a6191a3cc81949360efec6b68a21205b418d696efefa
+-- hash: 5334d1bf529e4ef6ce6388ef194b04fb9ca45abe9c15605117507d9ca55655e0
 
 name:           login-with-okta
 version:        0.1.0.0
@@ -27,7 +27,6 @@ source-repository head
 library
   exposed-modules:
       Data.Aeson.Okta.Ext
-      Main
       Okta.Samples.Common.JWT
       Okta.Samples.Common.OIDC
       Okta.Samples.Common.Templates
@@ -73,46 +72,14 @@ library
 executable login-with-okta-exe
   main-is: Main.hs
   other-modules:
-      Data.Aeson.Okta.Ext
-      Okta.Samples.Common.JWT
-      Okta.Samples.Common.OIDC
-      Okta.Samples.Common.Templates
-      Okta.Samples.Common.Token
-      Okta.Samples.Common.Types
-      Okta.Samples.Common.Utils
-      Okta.Samples.Scotty.App
-      Okta.Samples.Scotty.Handlers
-      Okta.Samples.Scotty.Sessions
-      Okta.Samples.Scotty.Utils
-      Okta.Samples.Scotty.Views
       Paths_login_with_okta
   hs-source-dirs:
-      src
+      app
   ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      aeson
-    , aeson-pretty
-    , base >=4.7 && <5
-    , binary
-    , bytestring
-    , cookie
-    , http-conduit
-    , http-types
-    , jose
-    , lens
-    , lucid
-    , monad-time
-    , mtl
-    , network-uri
+      base >=4.7 && <5
+    , login-with-okta
     , optparse-applicative
-    , scotty
-    , text
-    , time
-    , unordered-containers
-    , wai
-    , wai-extra
-    , wai-middleware-static
-    , warp
   default-language: Haskell2010
 
 test-suite login-with-okta-test
@@ -125,7 +92,7 @@ test-suite login-with-okta-test
       Paths_login_with_okta
   hs-source-dirs:
       test
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aeson
     , base >=4.7 && <5
