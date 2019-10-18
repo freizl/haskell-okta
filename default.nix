@@ -7,7 +7,7 @@ let
             haskellPackagesNew.callPackage ./examples/login-with-okta/login-with-okta.nix { };
 
           jose =
-            haskellPackagesNew.callPackage ./jose.nix { };
+            pkgs.haskell.lib.dontCheck haskellPackagesOld.jose;
 
           lens =
             haskellPackagesNew.callPackage ./lens.nix { };

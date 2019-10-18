@@ -16,7 +16,7 @@ runAppOptionParser = execParser opts
   where
     opts = info (appOptionParser <**> helper)
       ( fullDesc
-        <> progDesc "Login with Okta Sample Application. By default it's run against Org AS until Custom AS Id has been provided via 'custom-as'."
+        <> progDesc "Login with Okta Sample Application. By default it's run against Org AS or Custom AS with the ID from parameter 'custom_as'."
         <> header "happy hacking with Okta" )
 
 appOptionParser :: Parser AppOption
@@ -24,7 +24,7 @@ appOptionParser = AppOption
       <$> strOption
           ( long "issuer"
           <> short 'i'
-          <> help "issuer" )
+          <> help "issuer. (e.g. https://{yourOktaDomain})" )
       <*> strOption
           ( long "client_id"
           <> short 'c'
@@ -46,7 +46,12 @@ appOptionParser = AppOption
             <|>
             pure ["openid", "profile", "email"]
           )
-      <*> optional (strOption (long "custom-as" <> help "(optonal) custom authorization server ID."))
+      <*> optional (strOption (long "custom_as"
+                               <> value "default"
+                               <> showDefault
+                               <> help "custom authorization server ID."
+                               )
+                    )
       <*> switch
           ( long "debug"
           <> short 'd'
