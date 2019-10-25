@@ -4,7 +4,6 @@
 module Okta.Samples.Common.AppTypes where
 
 import           Control.Lens        hiding (iat, (.=))
-import           Data.Aeson.TH
 import           Data.Text.Lazy      (Text)
 import           Web.Scotty.Trans (ScottyT, ActionT)
 import Control.Monad.State (StateT)

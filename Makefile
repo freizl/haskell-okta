@@ -8,7 +8,7 @@ watch:
 clean:
 	cabal v2-clean
 
-build:
+build: hpack
 	cabal v2-build all
 
 test:
