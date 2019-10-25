@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5334d1bf529e4ef6ce6388ef194b04fb9ca45abe9c15605117507d9ca55655e0
+-- hash: fbb38ccd9a7b3963350c2a07e85ab9ed18aa1b0348974c5857aa287e503f5504
 
 name:           login-with-okta
 version:        0.1.0.0
@@ -27,6 +27,7 @@ source-repository head
 library
   exposed-modules:
       Data.Aeson.Okta.Ext
+      Okta.Samples.Common.AppTypes
       Okta.Samples.Common.JWT
       Okta.Samples.Common.OIDC
       Okta.Samples.Common.Templates

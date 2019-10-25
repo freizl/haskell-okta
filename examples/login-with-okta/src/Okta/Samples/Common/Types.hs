@@ -20,23 +20,6 @@ type Port = Int
 type Email = Text
 
 --------------------------------------------------
--- * App server option
---------------------------------------------------
-
-data AppOption = AppOption
-  { _appIssuer       :: Text
-  , _appClientId     :: Text
-  , _appClientSecret :: Text
-  , _appRedirectUri  :: Text
-  , _appScopes       :: [Text]
-  , _appCustomAsId   :: Maybe Text         -- ^ Custom Authorization Server ID
-  , _appDebug        :: Bool
-  , _appPort         :: Int
-  } deriving (Show)
-
-makeLenses ''AppOption
-
---------------------------------------------------
 -- * Okta API
 --------------------------------------------------
 type AccessToken = Text

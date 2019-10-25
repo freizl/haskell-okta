@@ -11,9 +11,10 @@ import           Data.Text.Lazy            (Text)
 import qualified Data.Text.Lazy            as T
 import qualified Data.Text.Lazy.Encoding   as T
 import           Web.Cookie
-import           Web.Scotty
+import           Web.Scotty.Trans
 
 import           Okta.Samples.Common.Types
+import           Okta.Samples.Common.AppTypes
 
 
 type CookieKey = BS.ByteString
@@ -25,12 +26,12 @@ renderSetCookie' :: SetCookie -> Text
 renderSetCookie' = T.decodeUtf8 . B.toLazyByteString . renderSetCookie
 
 --------------------------------------------------
--- * cookie ActionM
+-- * cookie OktaSampleAppActionM
 --------------------------------------------------
 
 setCookieM :: CookieKey  -- ^ cookie name
            -> BS.ByteString  -- ^ cookie value
-           -> ActionM ()
+           -> OktaSampleAppActionM ()
 setCookieM n v = addHeader "Set-Cookie"
   (renderSetCookie' (def { setCookieName = n
                          , setCookieValue = v
@@ -39,7 +40,7 @@ setCookieM n v = addHeader "Set-Cookie"
                     ))
 
 deleteCookieM :: CookieKey  -- cookie name
-              -> ActionM ()
+              -> OktaSampleAppActionM ()
 deleteCookieM n = addHeader "Set-Cookie"
   (renderSetCookie' (def { setCookieName = n
                         , setCookieValue = ""
@@ -50,7 +51,7 @@ deleteCookieM n = addHeader "Set-Cookie"
 
 -- CookiesText is alias for [(Text, Text)]
 --
-getCookiesM' :: ActionM (Maybe CookiesText)
+getCookiesM' :: OktaSampleAppActionM (Maybe CookiesText)
 getCookiesM' =
     fmap (parseCookiesText . lazyToStrict . T.encodeUtf8) <$> header "Cookie"
     where
@@ -63,26 +64,26 @@ getCookieV key (Just ((a, b): xs))
   | a == T.toStrict key = Just (T.fromStrict b)
   | otherwise = getCookieV key (Just xs)
 
-getCookiesM :: CookieKey -> ActionM (Maybe Text)
+getCookiesM :: CookieKey -> OktaSampleAppActionM (Maybe Text)
 getCookiesM key = fmap (getCookieV . T.decodeUtf8 . BSL.fromStrict $ key) getCookiesM'
 
 --------------------------------------------------
--- * User cookie ActionM
+-- * User cookie OktaSampleAppActionM
 --------------------------------------------------
 
-withCookieUserM :: (CookieUser -> ActionM ()) -> ActionM () -> ActionM ()
+withCookieUserM :: (CookieUser -> OktaSampleAppActionM ()) -> OktaSampleAppActionM () -> OktaSampleAppActionM ()
 withCookieUserM yes no = getCookieUserM >>= maybe no yes
 
-getCookieUserM :: ActionM (Maybe CookieUser)
+getCookieUserM :: OktaSampleAppActionM (Maybe CookieUser)
 getCookieUserM = maybe Nothing (decode . T.encodeUtf8) <$> getCookiesM sampleAppCookieUserKey
 
-setCookieUserM :: BS.ByteString -> ActionM ()
+setCookieUserM :: BS.ByteString -> OktaSampleAppActionM ()
 setCookieUserM = setCookieM sampleAppCookieUserKey
 
-deleteCookieUserM :: ActionM ()
+deleteCookieUserM :: OktaSampleAppActionM ()
 deleteCookieUserM = deleteCookieM sampleAppCookieUserKey
 
-deleteWidgetCookieM :: ActionM ()
+deleteWidgetCookieM :: OktaSampleAppActionM ()
 deleteWidgetCookieM =
   mapM_
   deleteCookieM

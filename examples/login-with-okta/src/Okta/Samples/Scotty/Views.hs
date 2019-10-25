@@ -2,22 +2,23 @@ module Okta.Samples.Scotty.Views where
 
 import           Data.Text.Lazy                (Text)
 import qualified Lucid.Base                    as H
-import           Web.Scotty
+import           Web.Scotty.Trans
 
 import           Okta.Samples.Common.Templates
 import           Okta.Samples.Common.Types
+import           Okta.Samples.Common.AppTypes
 
-homeTpl :: Maybe CookieUser -> ActionM ()
+homeTpl :: Maybe CookieUser -> OktaSampleAppActionM ()
 homeTpl = lucidToHtml . homeH_
 
-loginCustomTpl :: Config -> ActionM ()
+loginCustomTpl :: Config -> OktaSampleAppActionM ()
 loginCustomTpl = lucidToHtml . loginH_
 
-profileTpl :: CookieUser -> ActionM ()
+profileTpl :: CookieUser -> OktaSampleAppActionM ()
 profileTpl = lucidToHtml . profileH_
 
-errorTpl :: Text -> ActionM ()
+errorTpl :: Text -> OktaSampleAppActionM ()
 errorTpl = lucidToHtml . errorH_
 
-lucidToHtml :: H.Html () -> ActionM ()
+lucidToHtml :: H.Html () -> OktaSampleAppActionM ()
 lucidToHtml = html . H.renderText

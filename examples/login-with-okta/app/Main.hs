@@ -5,7 +5,7 @@ module Main where
 import           Data.Semigroup            ((<>))
 import           Options.Applicative
 
-import           Okta.Samples.Common.Types
+import           Okta.Samples.Common.AppTypes
 import           Okta.Samples.Scotty.App   (app)
 
 main :: IO ()

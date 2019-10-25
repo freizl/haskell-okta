@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
 
-module Okta.Samples.Scotty.App (app, waiApp) where
+module Okta.Samples.Scotty.App (app, oktaSampleScottyApp) where
 
 import           Control.Lens                         ((^.))
 import           Control.Monad
@@ -12,12 +12,14 @@ import           Network.Wai.Handler.Warp             (run)
 import           Network.Wai.Middleware.RequestLogger
 import           Network.Wai.Middleware.Static        hiding ((<|>))
 import           Prelude                              hiding (exp)
-import           Web.Scotty
+-- import           Web.Scotty
+import           Web.Scotty.Trans
+import Control.Monad.State (evalStateT)
 
 import           Okta.Samples.Common.OIDC
+import           Okta.Samples.Common.AppTypes
 import           Okta.Samples.Common.Types
 import           Okta.Samples.Scotty.Handlers
-
 
 ------------------------------
 -- App
@@ -27,8 +29,7 @@ app :: AppOption -> IO ()
 app opt = do
   print opt
   let c = fromAppOptionToConfig opt
-  runApp c (waiApp opt c)
-
+  runApp c (\oc -> createWaiApp (OktaSampleAppState opt c oc) oktaSampleScottyApp)
 
 fromAppOptionToConfig :: AppOption -> Config
 fromAppOptionToConfig AppOption{..} =
@@ -44,23 +45,19 @@ runApp c theApp = do
     Left e -> ioError $ userError $ "Cannot fetch openid configuration" ++ show e
     Right oc -> theApp oc >>= run (c ^. port)
 
-createWaiApp :: AppOption -> ScottyM () -> IO WAI.Application
-createWaiApp opt extraScotty =
-  scottyApp $ do
-    when (opt ^. appDebug) (middleware logStdoutDev)
+createWaiApp :: OktaSampleAppState -> OktaSampleAppScottyM () -> IO WAI.Application
+createWaiApp appState sampleScottyApp =
+  scottyAppT (`evalStateT` appState) $ do
+    when (appState ^. (appOption . appDebug)) (middleware logStdoutDev)
     middleware $ staticPolicy (addBase "assets")
     defaultHandler globalErrorHandler
-    extraScotty
+    sampleScottyApp
 
-waiApp :: AppOption -> Config -> OpenIDConfiguration -> IO WAI.Application
-waiApp opt c oc = createWaiApp opt $ do
+oktaSampleScottyApp :: OktaSampleAppScottyM ()
+oktaSampleScottyApp = do
   get "/" homeH
-  get "/login-redirect" $ loginRedirectH c oc
-  get "/login-siw" $ loginCustomH c
-  get "/authorization-code/callback" $ callbackH c oc
-  get "/profile" $ profileH c
+  get "/login-redirect" loginRedirectH
+  get "/login-siw" loginCustomH
+  get "/authorization-code/callback" callbackH
+  get "/profile" profileH
   get "/logout" logoutH
-
---------------------------------------------------
--- * Handlers
---------------------------------------------------
