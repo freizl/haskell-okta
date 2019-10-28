@@ -24,11 +24,8 @@ import           Okta.Samples.Common.Utils
 
 data OktaJWTError
   = OktaJWTError JWTError
-  | OktaJWSError Error
-  | JWTIatInTheFuture String
   | JWTNonceNotMatch
   | JWTNonceNotFound
-  | JWTIssNotMatch
   | JWTAlgInHeaderNotMatch
   | JWTNoKeyFoundInHeader
   deriving (Eq, Show)
@@ -36,7 +33,7 @@ data OktaJWTError
 makeClassyPrisms ''OktaJWTError
 
 instance AsError OktaJWTError where
-  _Error = _OktaJWSError
+  _Error = _OktaJWTError . _JWSError
 
 instance AsJWTError OktaJWTError where
   _JWTError = _OktaJWTError
@@ -44,7 +41,6 @@ instance AsJWTError OktaJWTError where
 
 maxClockSkew :: NominalDiffTime
 maxClockSkew = 300
-
 
 verifyJwtData :: Config
               -> Nonce
