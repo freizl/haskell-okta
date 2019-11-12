@@ -11,6 +11,7 @@
 - [ ] explore `microlens-platform`.
   - one thing stops me is `makeClassyPrisms` in `JWT.hs`.
 - [ ] logger
+- [ ] reinvent https://oidcdebugger.com/ ?
 - [X] unit test is broken
 - [X] use `.well-known` endpoint to fetch authenticate url and issuer.
 - [x] merge `custom-login` and `okta-hosted-login`

@@ -71,6 +71,7 @@ loginToOkta astate anonce = do
                                     , ("redirect_uri", oc ^. oidcRedirectUri)
                                     , ("state", astate)
                                     , ("nonce", anonce)
+                                    , ("prompt", "consent")
                                     ]
   let fullurl = T.concat [ openidConfig' ^. authorizationEndpoint
                           , "?"

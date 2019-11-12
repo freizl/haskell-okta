@@ -9,6 +9,7 @@ dist-newstyle
 cabal.project.local*
 report.html
 result
+dist
 
 # Emacs
 TAGS
