@@ -2,6 +2,7 @@
 ##
 SRC=examples
 
+## replace by https://github.com/ndmitchell/ghcid
 watch:
 	find $(SRC) -name '*.hs' | entr -s 'make build'
 
