@@ -37,7 +37,7 @@ appOptionParser = AppOption
           ( long "redirect_uri"
           <> short 'r'
           <> help "redirect uri"
-          <> value "http://localhost:9191/authorization-code/callback"
+          <> value "http://localhost:9292/authorization-code/callback"  -- TODO: shall honor port param
           <> showDefault
           )
       <*> (some (strOption ( long "scopes"
@@ -46,6 +46,7 @@ appOptionParser = AppOption
             <|>
             pure ["openid", "profile", "email"]
           )
+      -- TODO: can remove optional ?
       <*> optional (strOption (long "custom_as"
                                <> value "default"
                                <> showDefault
