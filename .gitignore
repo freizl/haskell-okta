@@ -11,6 +11,8 @@ report.html
 result
 dist
 
+**/assets/widget
+
 # Emacs
 TAGS
 .projectile

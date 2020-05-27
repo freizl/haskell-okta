@@ -14,6 +14,7 @@ import qualified Data.Text.Lazy.Encoding   as TL
 import qualified Lucid.Base                as H
 import           Lucid.Html5
 
+import           Okta.Samples.Common.AppTypes
 import           Okta.Samples.Common.Types
 
 datase_ :: T.Text -> H.Attribute
@@ -170,6 +171,15 @@ baseH_ muser mainContent =
     )
   )
 
+widgetResouresLocal :: H.Html ()
+widgetResouresLocal =
+  let widgetBaseUri = "/widget"
+  in
+    script_ [src_ (widgetBaseUri `T.append` "/js/okta-sign-in.js"), type_ "text/javascript"] ("" :: Text)
+    <>
+    link_ [href_ (widgetBaseUri `T.append` "/css/okta-sign-in.css"), type_ "text/css", rel_ "stylesheet"]
+
+
 widgetResoures :: H.Html ()
 widgetResoures =
   let version = "3.2.2"
@@ -179,11 +189,11 @@ widgetResoures =
     <>
     link_ [href_ (widgetBaseUri `T.append` "/css/okta-sign-in.min.css"), type_ "text/css", rel_ "stylesheet"]
 
-loginH_ :: Config -> H.Html ()
-loginH_ c =
+loginH_ :: OktaSampleAppState -> H.Html ()
+loginH_ appState =
     html_ [lang_ "en"]
     (
-      head_ [] widgetResoures
+      head_ [] (if (appState ^. appOption ^. appUseLocalWidget) then widgetResouresLocal else widgetResoures)
       <>
       body_ []
       (
@@ -191,7 +201,7 @@ loginH_ c =
         <>
         script_
         ( TL.toStrict $ TL.decodeUtf8 $
-          "var oktaWidgetConfig = " `BS.append` Aeson.encode (oidcToWidgetConfig c)
+          "var oktaWidgetConfig = " `BS.append` Aeson.encode (oidcToWidgetConfig $ appState ^. config)
         )
         <>
         script_ [src_ "/js/main.js", type_ "text/javascript"] ("" :: Text)

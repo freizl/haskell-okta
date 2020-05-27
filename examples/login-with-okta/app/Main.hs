@@ -60,6 +60,10 @@ appOptionParser = AppOption
           ( long "debug"
           <> short 'd'
           <> help "enable debug mode" )
+      <*> switch
+          ( long "use_local_widget"
+          <> short 'w'
+          <> help "use local widget from assets/widget" )
       <*> option auto
           ( long "app_port"
           <> short 'p'

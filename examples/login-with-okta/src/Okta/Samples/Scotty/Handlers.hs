@@ -45,7 +45,7 @@ homeH = getCookieUserM >>= homeTpl
 loginCustomH :: OktaSampleAppActionM ()
 loginCustomH = do
   appState <- lift ST.get
-  withCookieUserM (const redirectToProfileM) (loginCustomTpl (appState ^. config))
+  withCookieUserM (const redirectToProfileM) (loginCustomTpl appState)
 
 loginRedirectH :: OktaSampleAppActionM ()
 loginRedirectH =

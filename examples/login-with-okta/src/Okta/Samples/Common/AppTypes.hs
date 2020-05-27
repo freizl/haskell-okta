@@ -24,6 +24,7 @@ data AppOption = AppOption
   , _appCustomAsId   :: Text         -- ^ Custom Authorization Server ID
   , _appUseOrgAs     :: Bool
   , _appDebug        :: Bool
+  , _appUseLocalWidget :: Bool  -- ^ use SignIn Widget from `assets/widget`
   , _appPort         :: Int
   } deriving (Show)
 

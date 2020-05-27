@@ -11,7 +11,7 @@ import           Okta.Samples.Common.Types
 homeTpl :: Maybe CookieUser -> OktaSampleAppActionM ()
 homeTpl = lucidToHtml . homeH_
 
-loginCustomTpl :: Config -> OktaSampleAppActionM ()
+loginCustomTpl :: OktaSampleAppState -> OktaSampleAppActionM ()
 loginCustomTpl = lucidToHtml . loginH_
 
 profileTpl :: CookieUser -> OktaSampleAppActionM ()
