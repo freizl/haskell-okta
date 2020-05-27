@@ -2,16 +2,16 @@
 
 module Okta.Samples.Common.Templates where
 
-import           Control.Lens              ((^.))
-import qualified Data.Aeson                as Aeson
-import           Data.Aeson.Encode.Pretty  (encodePretty)
-import qualified Data.ByteString.Lazy      as BS
-import           Data.Semigroup            ((<>))
-import qualified Data.Text                 as T
-import           Data.Text.Lazy            (Text)
-import qualified Data.Text.Lazy            as TL
-import qualified Data.Text.Lazy.Encoding   as TL
-import qualified Lucid.Base                as H
+import           Control.Lens                 ((^.))
+import qualified Data.Aeson                   as Aeson
+import           Data.Aeson.Encode.Pretty     (encodePretty)
+import qualified Data.ByteString.Lazy         as BS
+import           Data.Semigroup               ((<>))
+import qualified Data.Text                    as T
+import           Data.Text.Lazy               (Text)
+import qualified Data.Text.Lazy               as TL
+import qualified Data.Text.Lazy.Encoding      as TL
+import qualified Lucid.Base                   as H
 import           Lucid.Html5
 
 import           Okta.Samples.Common.AppTypes
@@ -193,7 +193,7 @@ loginH_ :: OktaSampleAppState -> H.Html ()
 loginH_ appState =
     html_ [lang_ "en"]
     (
-      head_ [] (if (appState ^. appOption ^. appUseLocalWidget) then widgetResouresLocal else widgetResoures)
+      head_ [] (if appState ^. (appOption . appUseLocalWidget) then widgetResouresLocal else widgetResoures)
       <>
       body_ []
       (
