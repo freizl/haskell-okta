@@ -7,22 +7,22 @@ import           Control.Lens                 ((^.))
 import           Control.Monad
 import           Control.Monad.Except
 import           Control.Monad.IO.Class       (liftIO)
+import qualified Control.Monad.State          as ST
 import           Data.Aeson                   (encode)
 import qualified Data.ByteString.Lazy.Char8   as BS
 import           Data.Text.Lazy               (Text)
 import qualified Data.Text.Lazy               as T
 import           Network.HTTP.Types
 import           Prelude                      hiding (exp)
-import qualified Control.Monad.State as ST
 
 import           Data.Maybe
-import           Web.Scotty.Trans
 import           Web.Scotty.Internal.Types
+import           Web.Scotty.Trans
 
+import           Okta.Samples.Common.AppTypes
 import           Okta.Samples.Common.OIDC
 import           Okta.Samples.Common.Token
 import           Okta.Samples.Common.Types
-import           Okta.Samples.Common.AppTypes
 import           Okta.Samples.Scotty.Sessions
 import           Okta.Samples.Scotty.Utils
 import           Okta.Samples.Scotty.Views
@@ -59,9 +59,7 @@ generatedNonce = "okta-hosted-login-nonce-123"
 
 loginToOkta :: Text -> Text -> OktaSampleAppActionM ()
 loginToOkta astate anonce = do
-  appState <- lift ST.get
-  let c = appState ^. config
-  let openidConfig' = appState ^. openidConfig
+  (c, openidConfig') <- getConfigs
   let oc = c ^. oidc
   let concatParam (a, b) = T.intercalate "=" [a, b]
   let queryStr = T.intercalate "&" $ map concatParam [ ("client_id", oc ^. oidcClientId)
@@ -125,10 +123,13 @@ authorizeCallbackH astate anonce= do
 
 handleAuthCallback :: [Text] -> [Text] -> OktaSampleAppActionM ()
 handleAuthCallback codeP nonceC = do
-  appState <- lift ST.get
-  let c = appState ^. config
-  let openidConfig' = appState ^. openidConfig
+  (c, openidConfig') <- getConfigs
   r' <- liftIO $ runExceptT $ fetchAuthUser c openidConfig' (head codeP) (head nonceC)
   case r' of
     Right userAndClaims -> setCookieUserM (BS.toStrict $ encode userAndClaims) >> redirectToProfileM
     Left e -> errorM e
+
+getConfigs :: OktaSampleAppActionM (Config, OpenIDConfiguration)
+getConfigs = do
+  appState <- lift ST.get
+  return (appState ^. config, appState ^. openidConfig)

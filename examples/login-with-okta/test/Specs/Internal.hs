@@ -18,8 +18,8 @@ import           Network.Wai.Test              (SResponse)
 import           Prelude                       hiding (exp)
 import           Test.Hspec.Wai
 
-import           Okta.Samples.Common.Templates
 import           Okta.Samples.Common.OIDC
+import           Okta.Samples.Common.Templates
 import           Okta.Samples.Common.Types
 import           Okta.Samples.Scotty.Sessions
 

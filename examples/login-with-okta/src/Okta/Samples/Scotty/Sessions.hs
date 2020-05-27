@@ -2,19 +2,19 @@
 
 module Okta.Samples.Scotty.Sessions where
 
-import           Control.Applicative       ((<$>))
-import           Data.Aeson                (decode)
-import qualified Data.Binary.Builder       as B
-import qualified Data.ByteString           as BS
-import qualified Data.ByteString.Lazy      as BSL
-import           Data.Text.Lazy            (Text)
-import qualified Data.Text.Lazy            as T
-import qualified Data.Text.Lazy.Encoding   as T
+import           Control.Applicative          ((<$>))
+import           Data.Aeson                   (decode)
+import qualified Data.Binary.Builder          as B
+import qualified Data.ByteString              as BS
+import qualified Data.ByteString.Lazy         as BSL
+import           Data.Text.Lazy               (Text)
+import qualified Data.Text.Lazy               as T
+import qualified Data.Text.Lazy.Encoding      as T
 import           Web.Cookie
 import           Web.Scotty.Trans
 
-import           Okta.Samples.Common.Types
 import           Okta.Samples.Common.AppTypes
+import           Okta.Samples.Common.Types
 
 
 type CookieKey = BS.ByteString

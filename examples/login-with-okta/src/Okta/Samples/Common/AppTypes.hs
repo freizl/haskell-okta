@@ -3,13 +3,13 @@
 
 module Okta.Samples.Common.AppTypes where
 
-import           Control.Lens        hiding (iat, (.=))
-import           Data.Text.Lazy      (Text)
-import           Web.Scotty.Trans (ScottyT, ActionT)
-import Control.Monad.State (StateT)
+import           Control.Lens              hiding (iat, (.=))
+import           Control.Monad.State       (StateT)
+import           Data.Text.Lazy            (Text)
+import           Web.Scotty.Trans          (ActionT, ScottyT)
 
-import           Okta.Samples.Common.Types
 import           Okta.Samples.Common.OIDC
+import           Okta.Samples.Common.Types
 
 --------------------------------------------------
 -- * App server option
@@ -30,8 +30,8 @@ data AppOption = AppOption
 makeLenses ''AppOption
 
 data OktaSampleAppState = OktaSampleAppState
-  { _appOption :: AppOption
-  , _config :: Config
+  { _appOption    :: AppOption
+  , _config       :: Config
   , _openidConfig :: OpenIDConfiguration
   }
 makeLenses ''OktaSampleAppState

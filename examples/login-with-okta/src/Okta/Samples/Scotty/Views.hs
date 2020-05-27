@@ -4,9 +4,9 @@ import           Data.Text.Lazy                (Text)
 import qualified Lucid.Base                    as H
 import           Web.Scotty.Trans
 
+import           Okta.Samples.Common.AppTypes
 import           Okta.Samples.Common.Templates
 import           Okta.Samples.Common.Types
-import           Okta.Samples.Common.AppTypes
 
 homeTpl :: Maybe CookieUser -> OktaSampleAppActionM ()
 homeTpl = lucidToHtml . homeH_

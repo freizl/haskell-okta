@@ -2,11 +2,11 @@
 
 module Main where
 
-import           Data.Semigroup            ((<>))
+import           Data.Semigroup               ((<>))
 import           Options.Applicative
 
 import           Okta.Samples.Common.AppTypes
-import           Okta.Samples.Scotty.App   (app)
+import           Okta.Samples.Scotty.App      (app)
 
 main :: IO ()
 main = runAppOptionParser >>= app
