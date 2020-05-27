@@ -6,13 +6,13 @@ module Okta.Samples.Scotty.App (app, oktaSampleScottyApp) where
 import           Control.Lens                         ((^.))
 import           Control.Monad
 import           Control.Monad.Except
+import Data.Maybe (fromMaybe)
 import qualified Data.Text.Lazy                       as TL
 import qualified Network.Wai                          as WAI
 import           Network.Wai.Handler.Warp             (run)
 import           Network.Wai.Middleware.RequestLogger
 import           Network.Wai.Middleware.Static        hiding ((<|>))
 import           Prelude                              hiding (exp)
--- import           Web.Scotty
 import           Web.Scotty.Trans
 import Control.Monad.State (evalStateT)
 
@@ -33,9 +33,11 @@ app opt = do
 
 fromAppOptionToConfig :: AppOption -> Config
 fromAppOptionToConfig AppOption{..} =
-  let iss = maybe _appIssuer (TL.append (_appIssuer `TL.append` "/oauth2/")) _appCustomAsId
+  let iss = if _appUseOrgAs then _appIssuer else (_appIssuer <> "/oauth2/" <> _appCustomAsId)
+      defaultRedirectUri = "http://localhost:" <> (TL.pack $ show _appPort) <> "/authorization-code/callback"
+      redirectUri = fromMaybe defaultRedirectUri _appRedirectUri
   in
-    Config (OIDC (TL.unwords _appScopes) iss _appClientId _appClientSecret _appRedirectUri Nothing) _appPort
+    Config (OIDC (TL.unwords _appScopes) iss _appClientId _appClientSecret redirectUri Nothing) _appPort
 
 runApp :: Config -> (OpenIDConfiguration -> IO WAI.Application) -> IO ()
 runApp c theApp = do

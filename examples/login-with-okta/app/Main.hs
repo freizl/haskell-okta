@@ -33,26 +33,29 @@ appOptionParser = AppOption
           ( long "client_secret"
           <> short 'x'
           <> help "client secret" )
-      <*> strOption
-          ( long "redirect_uri"
-          <> short 'r'
-          <> help "redirect uri"
-          <> value "http://localhost:9292/authorization-code/callback"  -- TODO: shall honor port param
-          <> showDefault
-          )
+      <*> optional (strOption ( long "redirect_uri"
+                                <> short 'r'
+                                <> help ("redirect uri. " ++
+                                         "default to http://localhost:{port}/authorization-code/callback"
+                                        )
+                              )
+                   )
       <*> (some (strOption ( long "scopes"
                           <> short 's'
                           <> help "scopes. (default: '-s openid -s profile -s email')"))
             <|>
             pure ["openid", "profile", "email"]
           )
-      -- TODO: can remove optional ?
-      <*> optional (strOption (long "custom_as"
-                               <> value "default"
-                               <> showDefault
-                               <> help "custom authorization server ID."
-                               )
+      <*> strOption (long "custom_as_id"
+                    <> short 'm'
+                      <> value "default"
+                      <> showDefault
+                      <> help "Custom AS ID."
                     )
+      <*> switch
+          ( long "use_org_as"
+          <> short 'o'
+          <> help "use Org AS. default to false hence use Custom AS by default" )
       <*> switch
           ( long "debug"
           <> short 'd'

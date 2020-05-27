@@ -19,9 +19,10 @@ data AppOption = AppOption
   { _appIssuer       :: Text
   , _appClientId     :: Text
   , _appClientSecret :: Text
-  , _appRedirectUri  :: Text
+  , _appRedirectUri  :: Maybe Text
   , _appScopes       :: [Text]
-  , _appCustomAsId   :: Maybe Text         -- ^ Custom Authorization Server ID
+  , _appCustomAsId   :: Text         -- ^ Custom Authorization Server ID
+  , _appUseOrgAs     :: Bool
   , _appDebug        :: Bool
   , _appPort         :: Int
   } deriving (Show)
