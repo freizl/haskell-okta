@@ -18,7 +18,7 @@ test:
 stylelish:
 	find $(SRC) -name '*.hs' | xargs stylish-haskell -i
 
-hlint:
+hlint: stylelish
 	hlint . --report
 
 hpack:
