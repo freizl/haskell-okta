@@ -80,9 +80,28 @@ loginToOkta astate anonce = do
 profileH :: OktaSampleAppActionM ()
 profileH = withCookieUserM profileTpl redirectToHomeM
 
--- TODO: add logout: https://developer.okta.com/docs/reference/api/oidc/#logout
+-- | delete cookie and 302 to okta to logout user session.
 logoutH :: OktaSampleAppActionM ()
-logoutH = deleteWidgetCookieM >> deleteCookieUserM >> redirectToHomeM
+logoutH =
+  deleteWidgetCookieM
+  >> deleteCookieUserM
+  >> withCookieUserM logoutOkta (return ())
+
+logoutOkta :: CookieUser -> OktaSampleAppActionM ()
+logoutOkta (_, _, tokenResp) = do
+  (c, openidConfig') <- getConfigs
+  let concatParam (a, b) = T.intercalate "=" [a, b]
+  let queryStr = T.intercalate "&"
+        $ map concatParam [ ("id_token_hint", tokenResp ^. idToken )
+                          -- TODO: init application site localhost:port as option in some data type
+                          , ("post_logout_redirect_uri", "http://localhost:" <> (T.pack $ show $ c ^. port))
+                          ]
+  let fullurl = T.concat [ openidConfig' ^. endSessionEndpoint
+                         , "?"
+                         , queryStr
+                         ]
+  redirect fullurl
+
 
 callbackH :: OktaSampleAppActionM ()
 callbackH = do
@@ -126,7 +145,7 @@ handleAuthCallback codeP nonceC = do
   (c, openidConfig') <- getConfigs
   r' <- liftIO $ runExceptT $ fetchAuthUser c openidConfig' (head codeP) (head nonceC)
   case r' of
-    Right userAndClaims -> setCookieUserM (BS.toStrict $ encode userAndClaims) >> redirectToProfileM
+    Right userAndClaimsAndResp -> setCookieUserM (BS.toStrict $ encode userAndClaimsAndResp) >> redirectToProfileM
     Left e -> errorM e
 
 getConfigs :: OktaSampleAppActionM (Config, OpenIDConfiguration)

@@ -80,7 +80,7 @@ homeMessageH_ appState Nothing =
     pre_ (H.toHtml $ TL.toStrict $ TL.decodeUtf8 $ encodePretty (appState ^. config . oidc))
   )
 
-homeMessageH_ _ (Just (_, user)) =
+homeMessageH_ _ (Just (_, user, _)) =
   let userName = (user ^. userInfoName)
   in
     p_ (H.toHtml $ "Welcome back, " `TL.append` userName)
@@ -97,7 +97,7 @@ homeMessageH_ _ (Just (_, user)) =
     )
 
 profileH_ :: CookieUser -> H.Html ()
-profileH_ cu@(claims, user) = baseH_ (Just cu) $
+profileH_ cu@(claims, user, _) = baseH_ (Just cu) $
   h2_ [class_ "ui dividing header", datase_ "profile-doc-header"] "My Profile"
   <>
   h3_ "User Info"

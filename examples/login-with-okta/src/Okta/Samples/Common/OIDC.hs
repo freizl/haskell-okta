@@ -29,6 +29,7 @@ data OpenIDConfiguration = OpenIDConfiguration
   , _tokenEndpoint         :: URI
   , _userinfoEndpoint      :: URI
   , _jwksUri               :: URI
+  , _endSessionEndpoint    :: URI
   }
 
 makeLenses ''OpenIDConfiguration

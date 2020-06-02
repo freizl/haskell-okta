@@ -54,7 +54,7 @@ data UserInfo = UserInfo
 makeLenses ''UserInfo
 $(deriveJSON defaultOptions{fieldLabelModifier = dropAndCamelTo2 9} ''UserInfo)
 
-type CookieUser = (ClaimsSet, UserInfo)
+type CookieUser = (ClaimsSet, UserInfo, TokenResponse)
 
 --------------------------------------------------
 -- * Sample Config
