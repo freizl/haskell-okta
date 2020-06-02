@@ -7,7 +7,7 @@ cabal-version: 1.12
 -- hash: fbb38ccd9a7b3963350c2a07e85ab9ed18aa1b0348974c5857aa287e503f5504
 
 name:           login-with-okta
-version:        0.1.0.0
+version:        0.2.0.0
 description:    Please see the README on Github at <https://github.com/freizl/haskell-okta/okta-hosted-login>
 category:       Web
 homepage:       https://github.com/freizl/haskell-okta#readme

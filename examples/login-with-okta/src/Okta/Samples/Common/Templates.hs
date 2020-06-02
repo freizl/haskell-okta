@@ -51,24 +51,19 @@ menuH_ muser =
     )
   )
 
-homeMessageH_ :: Maybe CookieUser -> H.Html ()
-homeMessageH_ Nothing =
+homeMessageH_ :: OktaSampleAppState -> Maybe CookieUser -> H.Html ()
+homeMessageH_ appState Nothing =
   section_ []
   (
-    p_ "Hello!"
-    <>
-    p_ "If you're viewing this page then you have successfully configured this example server.  Your server configuration is listed on the right. (TODO)"
+    h3_ "Hello, Okta!"
     <>
     p_
-    (
-      span_ "This example shows you how to to add the "
-      <>
-      a_ [ href_ "https://developer.okta.com/authentication-guide/implementing-authentication/auth-code"] "Authorization Code Flow"
-      <>
-      span_ " to your application."
-    )
-    <>
-    p_ "When you click the login button below, you will be redirected to the login page on your local application."
+      ( span_ "This is a demo application shows you how to to add the "
+        <>
+        a_ [ href_ "https://developer.okta.com/authentication-guide/implementing-authentication/auth-code"] "Authorization Code Flow"
+        <>
+        span_ " to your application."
+      )
     <>
     form_ [method_ "get", action_ "/login-redirect"]
     (
@@ -79,14 +74,18 @@ homeMessageH_ Nothing =
     (
       button_ [id_ "login-button", class_ "ui primary button", type_ "submit"] "Log In from customized SignIn Widget"
     )
+    <>
+    h3_ "This is OIDC config"
+    <>
+    pre_ (H.toHtml $ TL.toStrict $ TL.decodeUtf8 $ encodePretty (appState ^. config . oidc))
   )
 
-homeMessageH_ (Just (_, user)) =
+homeMessageH_ _ (Just (_, user)) =
   let userName = (user ^. userInfoName)
   in
     p_ (H.toHtml $ "Welcome back, " `TL.append` userName)
     <>
-    p_ "You have successfully authenticated against your Okta org, and have been redirected back to this application."
+    p_ "You have successfully authenticated against your Okta org."
     <>
     p_
     (
@@ -94,7 +93,7 @@ homeMessageH_ (Just (_, user)) =
       <>
       a_ [href_ "/profile"] "My Profile"
       <>
-      span_ " page in this application to view the information retrieved with your OAuth Access Token."
+      span_ " page to view User Info and ID Token."
     )
 
 profileH_ :: CookieUser -> H.Html ()
@@ -112,43 +111,20 @@ profileH_ cu@(claims, user) = baseH_ (Just cu) $
       span_ " with your Access Token."
     )
   <>
-  table_ [class_ "ui table compact collapsing"]
-  (
-    thead_ []
-    (
-      tr_
-      (
-        th_ "Claim"
-        <>
-        th_ "Value"
-      )
-    )
-    <>
-    tbody_
-    (
-      tr_ (td_ "name" <> td_ [id_ "claim-name"] (H.toHtml $ user ^. userInfoName))
-      <>
-      tr_ (td_ "email" <> td_ [id_ "claim-email"] (H.toHtml $ user ^. userInfoEmail))
-      <>
-      tr_ (td_ "givenName" <> td_ [id_ "claim-givenName"] (H.toHtml $ user ^. userInfoGivenName))
-      <>
-      tr_ (td_ "zoneInfo" <> td_ [id_ "claim-zoneInfo"] (H.toHtml $ user ^. userInfoZoneinfo))
-      <>
-      tr_ (td_ "infoSub" <> td_ [id_ "claim-infoSub"] (H.toHtml $ user ^. userInfoSub))
-    )
-  )
+  pre_ (H.toHtml $ TL.toStrict $ TL.decodeUtf8 $ encodePretty user)
   <>
   h3_ "ID Token Claims"
   <>
   pre_ [] (H.toHtml $ encodePretty claims)
 
-homeH_ :: Maybe CookieUser
-         -> H.Html ()
-homeH_ muser = baseH_ muser
+homeH_ :: OktaSampleAppState
+       -> Maybe CookieUser
+       -> H.Html ()
+homeH_ appState muser = baseH_ muser
   (
     h2_ [ class_ "ui dividing header", datase_ "overview-doc-header"] "Login with Okta Examples"
     <>
-    homeMessageH_ muser
+    homeMessageH_ appState muser
   )
 
 baseH_ :: Maybe CookieUser -> H.Html () -> H.Html ()

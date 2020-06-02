@@ -44,8 +44,7 @@ homeH = getCookieUserM >>= homeTpl
 
 loginCustomH :: OktaSampleAppActionM ()
 loginCustomH = do
-  appState <- lift ST.get
-  withCookieUserM (const redirectToProfileM) (loginCustomTpl appState)
+  withCookieUserM (const redirectToProfileM) loginCustomTpl
 
 loginRedirectH :: OktaSampleAppActionM ()
 loginRedirectH =
@@ -81,6 +80,7 @@ loginToOkta astate anonce = do
 profileH :: OktaSampleAppActionM ()
 profileH = withCookieUserM profileTpl redirectToHomeM
 
+-- TODO: add logout: https://developer.okta.com/docs/reference/api/oidc/#logout
 logoutH :: OktaSampleAppActionM ()
 logoutH = deleteWidgetCookieM >> deleteCookieUserM >> redirectToHomeM
 

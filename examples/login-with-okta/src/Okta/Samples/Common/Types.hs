@@ -77,6 +77,7 @@ makeLenses ''OIDC
 
 $(deriveJSON defaultOptions{fieldLabelModifier = dropAndCamelTo2 1} ''Config)
 $(deriveJSON defaultOptions{fieldLabelModifier = dropAndCamelTo2 5} ''OIDC)
+-- TODO: consider omit client secret at toJSON instance
 
 --------------------------------------------------
 -- * Okta Signin Widget Config
