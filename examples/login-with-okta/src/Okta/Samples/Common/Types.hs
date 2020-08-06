@@ -77,7 +77,7 @@ makeLenses ''OIDC
 
 $(deriveJSON defaultOptions{fieldLabelModifier = dropAndCamelTo2 1} ''Config)
 $(deriveJSON defaultOptions{fieldLabelModifier = dropAndCamelTo2 5} ''OIDC)
--- TODO: consider omit client secret at toJSON instance
+-- FIXME: consider omit client secret at toJSON instance
 
 --------------------------------------------------
 -- * Okta Signin Widget Config
@@ -92,8 +92,8 @@ data SigninWidgetConfig =
                        }
 data WidgetAuthParam =
     WidgetAuthParam { _widgetIssuer       :: Text
-                    , _widgetResponseType :: Text
-                    , _widgetDisplay      :: Text
+                    -- , _widgetResponseType :: Text  -- these are not from cli parameters. hard code from UI now.
+                    -- , _widgetDisplay      :: Text
                     , _widgetScope        :: [Text]
                     }
 

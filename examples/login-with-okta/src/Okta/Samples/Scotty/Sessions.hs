@@ -3,7 +3,8 @@
 module Okta.Samples.Scotty.Sessions where
 
 import           Control.Applicative          ((<$>))
-import           Data.Aeson                   (decode)
+import           Control.Monad.IO.Class       (liftIO)
+import           Data.Aeson                   (decode, eitherDecode)
 import qualified Data.Binary.Builder          as B
 import qualified Data.ByteString              as BS
 import qualified Data.ByteString.Lazy         as BSL
@@ -43,10 +44,10 @@ deleteCookieM :: CookieKey  -- cookie name
               -> OktaSampleAppActionM ()
 deleteCookieM n = addHeader "Set-Cookie"
   (renderSetCookie' (def { setCookieName = n
-                        , setCookieValue = ""
-                        , setCookiePath = Just "/"
-                        , setCookieMaxAge = Just (-1000000000)
-                        }
+                         , setCookieValue = ""
+                         , setCookiePath = Just "/"
+                         , setCookieMaxAge = Just (-1000000000)
+                         }
                     ))
 
 -- CookiesText is alias for [(Text, Text)]
@@ -69,13 +70,25 @@ getCookiesM key = fmap (getCookieV . T.decodeUtf8 . BSL.fromStrict $ key) getCoo
 
 --------------------------------------------------
 -- * User cookie OktaSampleAppActionM
+--
+-- TODO: this is poor man's session management using cookie.
+-- of course should use real session management mechanism
+-- whenever security is important.
+-- hence don't even bother to implement `SameSite: Strict`
 --------------------------------------------------
 
 withCookieUserM :: (CookieUser -> OktaSampleAppActionM ()) -> OktaSampleAppActionM () -> OktaSampleAppActionM ()
 withCookieUserM yes no = getCookieUserM >>= maybe no yes
 
 getCookieUserM :: OktaSampleAppActionM (Maybe CookieUser)
-getCookieUserM = maybe Nothing (decode . T.encodeUtf8) <$> getCookiesM sampleAppCookieUserKey
+getCookieUserM = do
+  ma <- getCookiesM sampleAppCookieUserKey
+  case ma of
+    Nothing -> return Nothing
+    Just a ->
+      case eitherDecode (T.encodeUtf8 a) of
+        Left e -> liftIO (putStrLn e) >> return Nothing
+        Right v -> return (Just v)
 
 setCookieUserM :: BS.ByteString -> OktaSampleAppActionM ()
 setCookieUserM = setCookieM sampleAppCookieUserKey

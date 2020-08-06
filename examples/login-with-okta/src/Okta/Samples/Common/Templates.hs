@@ -2,10 +2,9 @@
 
 module Okta.Samples.Common.Templates where
 
-import           Control.Lens                 ((^.))
+import           Control.Lens                 ((^.), (.~), (&))
 import qualified Data.Aeson                   as Aeson
 import           Data.Aeson.Encode.Pretty     (encodePretty)
-import qualified Data.ByteString.Lazy         as BS
 import           Data.Semigroup               ((<>))
 import qualified Data.Text                    as T
 import           Data.Text.Lazy               (Text)
@@ -55,29 +54,53 @@ homeMessageH_ :: OktaSampleAppState -> Maybe CookieUser -> H.Html ()
 homeMessageH_ appState Nothing =
   section_ []
   (
-    h3_ "Hello, Okta!"
-    <>
-    p_
-      ( span_ "This is a demo application shows you how to to add the "
-        <>
-        a_ [ href_ "https://developer.okta.com/authentication-guide/implementing-authentication/auth-code"] "Authorization Code Flow"
-        <>
-        span_ " to your application."
-      )
+    h3_ "For Web App"
     <>
     form_ [method_ "get", action_ "/login-redirect"]
     (
-      button_ [id_ "login-button", class_ "ui primary button", type_ "submit"] "Log In from Okta page"
+      button_ [id_ "login-button", class_ "ui primary button", type_ "submit"] "Log In from Okta page (Code)"
     )
     <>
-    form_ [method_ "get", action_ "/login-siw"]
+    form_ [method_ "get", action_ "/login-custom"]
     (
-      button_ [id_ "login-button", class_ "ui primary button", type_ "submit"] "Log In from customized SignIn Widget"
+      input_ [type_ "hidden", name_ "renderType", value_ "code"]
+      <>
+      button_ [id_ "login-button", class_ "ui primary button", type_ "submit"] "Log In from customized SignIn Widget (Code)"
+    )
+    <>
+    form_ [method_ "get", action_ "/login-custom"]
+    (
+      input_ [type_ "hidden", name_ "renderType", value_ "implicit"]
+      <>
+      button_ [id_ "login-button", class_ "ui primary button", type_ "submit"] "Log In from customized SignIn Widget (Implicit)"
+    )
+    <>
+    h3_ "For SPA App"
+    <>
+    form_ [method_ "get", action_ "/login-custom"]
+    (
+      input_ [type_ "hidden", name_ "renderType", value_ "implicit"]
+      <>
+      button_ [id_ "login-button", class_ "ui primary button", type_ "submit"] "Log In from customized SignIn Widget (Implicit)"
+    )
+    <>
+    form_ [method_ "get", action_ "/login-custom"]
+    (
+      input_ [type_ "hidden", name_ "renderType", value_ "pkce"]
+      <>
+      button_ [id_ "login-button", class_ "ui primary button", type_ "submit"] "Log In from customized SignIn Widget (PKCE)"
     )
     <>
     h3_ "This is OIDC config"
     <>
-    pre_ (H.toHtml $ TL.toStrict $ TL.decodeUtf8 $ encodePretty (appState ^. config . oidc))
+    pre_ (H.toHtml $ TL.toStrict $ TL.decodeUtf8 $ encodePretty ((appState ^. config . oidc) & oidcClientSecret .~  "xxxxx"))
+    <>
+    h3_ "Okta API Docs"
+    <>
+    ul_
+    (
+      li_ (a_ [ href_ "https://developer.okta.com/authentication-guide/implementing-authentication/auth-code"] "Authorization Code Flow")
+    )
   )
 
 homeMessageH_ _ (Just (_, user, _)) =
@@ -158,15 +181,15 @@ widgetResouresLocal =
 
 widgetResoures :: H.Html ()
 widgetResoures =
-  let version = "4.1.1"
+  let version = "4.3.0"
       widgetBaseUri = "https://global.oktacdn.com/okta-signin-widget/" `T.append` version
   in
     script_ [src_ (widgetBaseUri `T.append` "/js/okta-sign-in.min.js"), type_ "text/javascript"] ("" :: Text)
     <>
     link_ [href_ (widgetBaseUri `T.append` "/css/okta-sign-in.min.css"), type_ "text/css", rel_ "stylesheet"]
 
-loginH_ :: OktaSampleAppState -> H.Html ()
-loginH_ appState =
+loginH_ :: Text -> OktaSampleAppState -> H.Html ()
+loginH_ renderType appState =
     html_ [lang_ "en"]
     (
       head_ [] (if appState ^. (appOption . appUseLocalWidget) then widgetResouresLocal else widgetResoures)
@@ -176,8 +199,10 @@ loginH_ appState =
         div_ [id_ "sign-in-widget"] mempty
         <>
         script_
-        ( TL.toStrict $ TL.decodeUtf8 $
-          "var oktaWidgetConfig = " `BS.append` Aeson.encode (oidcToWidgetConfig $ appState ^. config)
+        ( TL.toStrict $
+            TL.decodeUtf8 ("const oktaWidgetConfig = " <> Aeson.encode (oidcToWidgetConfig $ appState ^. config)) <> ";"
+            <>
+            "\nconst widgetRenderType = '" <> renderType <> "';"
         )
         <>
         script_ [src_ "/js/main.js", type_ "text/javascript"] ("" :: Text)
@@ -189,12 +214,29 @@ oidcToWidgetConfig c =
   let o = c ^. oidc
       authParam = WidgetAuthParam
         (o ^. oidcIssuer)
-        "code"
-        "page"
         (TL.splitOn " " (o ^. oidcScope))
   in
     SigninWidgetConfig (TL.replace "/oauth2/default" "" (o ^. oidcIssuer))
       (o ^. oidcClientId)
       (o ^. oidcRedirectUri)
-      "https://www.haskell.org/static/img/haskell-logo.svg?etag=ukf3Fg7-"
+      "http://logofaves.com/wp-content/uploads/2016/07/style_m.jpg?9cf02b"
       authParam
+
+pkceCodeH_ :: OktaSampleAppState -> H.Html ()
+pkceCodeH_ appState =
+  html_ [lang_ "en"]
+  (
+    head_ [] (if appState ^. (appOption . appUseLocalWidget) then widgetResouresLocal else widgetResoures)
+    <>
+    body_ []
+    (
+      h2_ "Finishing PKCE flow ..."
+      <>
+      script_
+      ( TL.toStrict $
+        TL.decodeUtf8 ("const oktaWidgetConfig = " <> Aeson.encode (oidcToWidgetConfig $ appState ^. config)) <> ";"
+      )
+      <>
+        script_ [src_ "/js/pkce.js", type_ "text/javascript"] ("" :: Text)
+    )
+  )

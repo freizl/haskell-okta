@@ -15,14 +15,17 @@ homeTpl cu = do
   appState <- lift ST.get
   lucidToHtml (homeH_ appState cu)
 
-loginCustomTpl :: OktaSampleAppActionM ()
-loginCustomTpl = lift ST.get >>= (lucidToHtml . loginH_)
+loginCustomTpl :: Text -> OktaSampleAppActionM ()
+loginCustomTpl renderType = lift ST.get >>= lucidToHtml . loginH_ renderType
 
 profileTpl :: CookieUser -> OktaSampleAppActionM ()
 profileTpl = lucidToHtml . profileH_
 
 errorTpl :: Text -> OktaSampleAppActionM ()
 errorTpl = lucidToHtml . errorH_
+
+pkceCodeTpl :: OktaSampleAppActionM ()
+pkceCodeTpl = lift ST.get >>= lucidToHtml . pkceCodeH_
 
 lucidToHtml :: H.Html () -> OktaSampleAppActionM ()
 lucidToHtml = html . H.renderText

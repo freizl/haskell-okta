@@ -59,7 +59,8 @@ oktaSampleScottyApp :: OktaSampleAppScottyM ()
 oktaSampleScottyApp = do
   get "/" homeH
   get "/login-redirect" loginRedirectH
-  get "/login-siw" loginCustomH
-  get "/authorization-code/callback" callbackH
+  get "/login-custom" loginCustomH
+  get "/authorization-code/callback" webCodeCallbackH
+  get "/authorization-code/pkce" pkceCodeCallbackH
   get "/profile" profileH
   get "/logout" logoutH

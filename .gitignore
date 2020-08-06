@@ -16,3 +16,4 @@ dist
 # Emacs
 TAGS
 .projectile
+.log

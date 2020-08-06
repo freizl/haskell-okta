@@ -41,7 +41,7 @@ fetchAuthUser :: Config
               -> OpenIDConfiguration
               -> Code
               -> Nonce
-              -> ExceptT Text IO (ClaimsSet, UserInfo, TokenResponse)
+              -> ExceptT Text IO CookieUser
 fetchAuthUser c openidConfig codeP nonceP = do
   tokenResp <- fetchToken c openidConfig codeP
   liftIO (putStr "ID Token:" >> print (tokenResp ^. idToken))
