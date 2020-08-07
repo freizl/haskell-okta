@@ -24,8 +24,8 @@ profileTpl = lucidToHtml . profileH_
 errorTpl :: Text -> OktaSampleAppActionM ()
 errorTpl = lucidToHtml . errorH_
 
-pkceCodeTpl :: OktaSampleAppActionM ()
-pkceCodeTpl = lift ST.get >>= lucidToHtml . pkceCodeH_
+implicitCallbackTpl :: OktaSampleAppActionM ()
+implicitCallbackTpl = lift ST.get >>= lucidToHtml . implicitCallbackH_
 
 lucidToHtml :: H.Html () -> OktaSampleAppActionM ()
 lucidToHtml = html . H.renderText

@@ -26,3 +26,21 @@ run this command to show help message regarding how to run the application
 
 2. Custom AS's AccessToken `aud` is what admin customized, default to `api:default` which can be customized at Admin UI (Security -> API).
    AcessToken is intend to be used by your resource server hence shall be able to verify the AccessToken
+
+# TODO
+
+## Refactoring (change to as playground)
+
+1. specify parameters from UI (redirect URI, scopes, response type etc)
+  - need to 'remember' the parameters for `/callback` endpoint,
+    which could have either `code` or `id_token`, `access_token`
+2. be able to generate `/authorize` url and redirect to okta for login
+3. redirect to customized siw page
+  - use saved parameters at step 1 to render widget
+  - on success, widget may redirect to `/callback` endpoint
+  - or call widget's `successHandler`
+4. callback handlers for 
+  - `web code` flow (exchange code for tokens in server side)
+  - implicit/pkce flow (exchange code in client side or just obtain tokens from uri)
+
+## What if it is app used by many people?

@@ -68,13 +68,6 @@ homeMessageH_ appState Nothing =
       button_ [id_ "login-button", class_ "ui primary button", type_ "submit"] "Log In from customized SignIn Widget (Code)"
     )
     <>
-    form_ [method_ "get", action_ "/login-custom"]
-    (
-      input_ [type_ "hidden", name_ "renderType", value_ "implicit"]
-      <>
-      button_ [id_ "login-button", class_ "ui primary button", type_ "submit"] "Log In from customized SignIn Widget (Implicit)"
-    )
-    <>
     h3_ "For SPA App"
     <>
     form_ [method_ "get", action_ "/login-custom"]
@@ -222,21 +215,23 @@ oidcToWidgetConfig c =
       "http://logofaves.com/wp-content/uploads/2016/07/style_m.jpg?9cf02b"
       authParam
 
-pkceCodeH_ :: OktaSampleAppState -> H.Html ()
-pkceCodeH_ appState =
+implicitCallbackH_ :: OktaSampleAppState -> H.Html ()
+implicitCallbackH_ appState =
   html_ [lang_ "en"]
   (
     head_ [] (if appState ^. (appOption . appUseLocalWidget) then widgetResouresLocal else widgetResoures)
     <>
     body_ []
     (
-      h2_ "Finishing PKCE flow ..."
+      h2_ "Finishing implicit flow ..."
       <>
       script_
       ( TL.toStrict $
         TL.decodeUtf8 ("const oktaWidgetConfig = " <> Aeson.encode (oidcToWidgetConfig $ appState ^. config)) <> ";"
+        <>
+        "\nconst widgetRenderType = '" <> "implicit" <> "';"
       )
       <>
-        script_ [src_ "/js/pkce.js", type_ "text/javascript"] ("" :: Text)
+        script_ [src_ "/js/main.js", type_ "text/javascript"] ("" :: Text)
     )
   )

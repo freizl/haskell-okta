@@ -111,8 +111,8 @@ logoutOkta (_, _, tokenResp) = do
   redirect fullurl
 
 
-pkceCodeCallbackH :: OktaSampleAppActionM ()
-pkceCodeCallbackH = pkceCodeTpl
+implicitCallbackH :: OktaSampleAppActionM ()
+implicitCallbackH = implicitCallbackTpl
 
 webCodeCallbackH :: OktaSampleAppActionM ()
 webCodeCallbackH = do

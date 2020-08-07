@@ -61,6 +61,6 @@ oktaSampleScottyApp = do
   get "/login-redirect" loginRedirectH
   get "/login-custom" loginCustomH
   get "/authorization-code/callback" webCodeCallbackH
-  get "/authorization-code/pkce" pkceCodeCallbackH
+  get "/authorization-code/implicit" implicitCallbackH
   get "/profile" profileH
   get "/logout" logoutH
