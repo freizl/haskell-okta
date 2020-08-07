@@ -78,7 +78,7 @@
 
     redirectUri = redirectUri.replace('authorization-code/callback', 'authorization-code/implicit');
   }
-  authParams.scope.push('offline_access');
+
   const widgetConfig = {
     ...config,
     authParams,
