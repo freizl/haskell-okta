@@ -4,6 +4,8 @@ module Main where
 
 import           Data.Semigroup               ((<>))
 import           Options.Applicative
+import Paths_login_with_okta (version)
+import Data.Version (showVersion)
 
 import           Okta.Samples.Common.AppTypes
 import           Okta.Samples.Scotty.App      (app)
@@ -17,7 +19,7 @@ runAppOptionParser = execParser opts
     opts = info (appOptionParser <**> helper)
       ( fullDesc
         <> progDesc "Login with Okta Sample Application. By default it's run against Org AS or Custom AS with the ID from parameter 'custom_as'."
-        <> header "happy hacking with Okta" )
+        <> header ("Happy hacking with Okta - " <> (showVersion version)))
 
 appOptionParser :: Parser AppOption
 appOptionParser = AppOption

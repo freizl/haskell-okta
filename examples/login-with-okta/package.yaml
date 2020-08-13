@@ -1,5 +1,5 @@
 name:                login-with-okta
-version:             0.1.0.0
+version:             0.2.0.0
 github:              "freizl/haskell-okta"
 license:             Apache-2.0
 author:              Haisheng Wu
@@ -58,7 +58,6 @@ executables:
     dependencies:
     - login-with-okta
     - optparse-applicative
-
 
 tests:
   login-with-okta-test:

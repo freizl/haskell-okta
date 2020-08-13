@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.1.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: fbb38ccd9a7b3963350c2a07e85ab9ed18aa1b0348974c5857aa287e503f5504
+-- hash: 795def9f51d467c834c82ba4c4b61531aa63085bd4410171d2e65107c8ffa341
 
 name:           login-with-okta
 version:        0.2.0.0
