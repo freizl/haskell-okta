@@ -116,5 +116,6 @@
 
   window.osi = osi;
   window.ac = ac;
+  window.hwRenewToken = () => { ac.tokenManager.get('idToken').then(it => ac.token.renew(it)); };
  
 })(widgetRenderType, oktaWidgetConfig);
