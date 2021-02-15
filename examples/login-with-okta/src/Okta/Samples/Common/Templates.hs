@@ -174,7 +174,7 @@ widgetResouresLocal =
 
 widgetResoures :: H.Html ()
 widgetResoures =
-  let version = "4.3.0"
+  let version = "5.3.3"
       widgetBaseUri = "https://global.oktacdn.com/okta-signin-widget/" `T.append` version
   in
     script_ [src_ (widgetBaseUri `T.append` "/js/okta-sign-in.min.js"), type_ "text/javascript"] ("" :: Text)
